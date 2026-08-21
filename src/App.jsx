@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Gallery from './pages/Gallery';
 import PdSession from './presentations/PdSession/PdSession';
 import Audience from './pages/Audience';
+import Admin from './pages/Admin';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<Gallery />} />
         <Route path="/presentation/pd-session" element={<PdSession />} />
         <Route path="/audience" element={<Audience />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </div>
   );
