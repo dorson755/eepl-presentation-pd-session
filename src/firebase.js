@@ -13,10 +13,12 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
-// Set full session state (replaces document to avoid stale leftover keys)
+// Merge session state into the Firestore document so that concurrent writers
+// (SlideSync updating slide metadata and games publishing gameData) don't
+// clobber each other's fields.
 export const updateSessionState = async (sessionId, data) => {
   const ref = doc(db, 'sessions', sessionId);
-  await setDoc(ref, { ...data, updatedAt: Date.now() });
+  await setDoc(ref, { ...data, updatedAt: Date.now() }, { merge: true });
   return ref;
 };
 

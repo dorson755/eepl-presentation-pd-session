@@ -27,23 +27,26 @@ const SLIDE_INFO = [
   { index: 9, title: "Closing & Reflections", subtitle: "Every mickle mek a muckle", activeGame: "takeaway" }
 ];
 
-const SlideSync = ({ slideNumber = 0, numberOfSlides = 10 }) => {
+const SlideSync = ({ slideNumber = 1, numberOfSlides = 10 }) => {
   const lastSlideRef = useRef(null);
 
   useEffect(() => {
     if (slideNumber === lastSlideRef.current) return;
     lastSlideRef.current = slideNumber;
 
-    const info = SLIDE_INFO[slideNumber] || {
-      index: slideNumber,
-      title: `Slide ${slideNumber + 1}`,
+    // Spectacle passes slideNumber as 1-based (activeView.slideIndex + 1),
+    // so convert to a 0-based index for SLIDE_INFO lookup.
+    const slideIndex = slideNumber - 1;
+    const info = SLIDE_INFO[slideIndex] || {
+      index: slideIndex,
+      title: `Slide ${slideNumber}`,
       subtitle: "Live Presentation",
       activeGame: null
     };
 
     // ALWAYS update basic session info so Audience knows the active game
     updateSessionState('live_presentation', {
-      slideIndex: slideNumber,
+      slideIndex: slideIndex,
       slideTitle: info.title,
       slideSubtitle: info.subtitle,
       activeGame: info.activeGame,
@@ -52,7 +55,7 @@ const SlideSync = ({ slideNumber = 0, numberOfSlides = 10 }) => {
     });
   }, [slideNumber]);
 
-  const progress = ((slideNumber + 1) / numberOfSlides) * 100;
+  const progress = (slideNumber / numberOfSlides) * 100;
   return (
     <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '8px', background: 'rgba(255,255,255,0.05)', zIndex: 100 }}>
       <motion.div 
