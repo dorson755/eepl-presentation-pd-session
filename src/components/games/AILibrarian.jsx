@@ -27,10 +27,11 @@ const AILibrarian = () => {
   }, []);
 
   const handleSend = async () => {
-    if (!query.trim()) return;
-    
-    const newMessages = [...messages, { role: 'user', content: query }];
-    setMessages(newMessages);
+    if (!query.trim() || loading) return;
+
+    const userMsg = { role: 'user', content: query };
+    const sentMessages = [...messages, userMsg];
+    setMessages([...sentMessages, { role: 'assistant', content: '' }]);
     setQuery('');
     setLoading(true);
 
@@ -38,21 +39,73 @@ const AILibrarian = () => {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages })
+        body: JSON.stringify({ messages: sentMessages })
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        const errMsg = data?.error || `Error ${response.status}`;
+        const errData = await response.json().catch(() => ({}));
+        const errMsg = errData?.error || `Error ${response.status}`;
         console.error('[AILibrarian]', errMsg);
-        setMessages([...newMessages, { role: 'assistant', content: `⚠️ ${errMsg}` }]);
-      } else {
-        setMessages([...newMessages, { role: 'assistant', content: data.content }]);
+        setMessages(prev => {
+          const updated = [...prev];
+          updated[updated.length - 1] = { role: 'assistant', content: `⚠️ ${errMsg}` };
+          return updated;
+        });
+        return;
+      }
+
+      // Stream the response — tokens appear in the chat as they arrive.
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let assistantContent = '';
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed || !trimmed.startsWith('data: ')) continue;
+          const data = trimmed.slice(6);
+          if (data === '[DONE]') continue;
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.content) {
+              assistantContent += parsed.content;
+              setMessages(prev => {
+                const updated = [...prev];
+                updated[updated.length - 1] = { role: 'assistant', content: assistantContent };
+                return updated;
+              });
+            }
+            if (parsed.error) {
+              assistantContent += `⚠️ ${parsed.error}`;
+              setMessages(prev => {
+                const updated = [...prev];
+                updated[updated.length - 1] = { role: 'assistant', content: assistantContent };
+                return updated;
+              });
+            }
+          } catch {
+            // ignore incomplete JSON in split chunks
+          }
+        }
       }
     } catch (error) {
       console.error('[AILibrarian] fetch failed:', error);
-      setMessages([...newMessages, { role: 'assistant', content: "I'm sorry, I can't reach my archives right now. Please try again in a moment." }]);
+      setMessages(prev => {
+        const updated = [...prev];
+        updated[updated.length - 1] = {
+          role: 'assistant',
+          content: updated[updated.length - 1]?.content || "I'm sorry, I can't reach my archives right now. Please try again in a moment."
+        };
+        return updated;
+      });
     }
     setLoading(false);
   };
@@ -86,14 +139,14 @@ const AILibrarian = () => {
             </div>
             
             <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {messages.map((msg, idx) => (
+              {messages.map((msg, idx) => {
+                const isWaiting = loading && msg.role === 'assistant' && idx === messages.length - 1 && !msg.content;
+                return (
                 <div key={idx} style={{ alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '80%', background: msg.role === 'user' ? 'var(--accent-primary)' : 'var(--bg-glass-light)', padding: '1rem', borderRadius: '12px', borderBottomRightRadius: msg.role === 'user' ? 0 : '12px', borderBottomLeftRadius: msg.role === 'assistant' ? 0 : '12px', color: msg.role === 'user' ? '#fff' : 'var(--text-primary)', fontSize: '0.95rem' }}>
-                  {msg.content}
+                  {isWaiting ? <span style={{ fontStyle: 'italic', color: 'var(--text-secondary)' }}>Thinking...</span> : msg.content}
                 </div>
-              ))}
-              {loading && (
-                <div style={{ alignSelf: 'flex-start', color: 'var(--text-secondary)', fontSize: '0.9rem', fontStyle: 'italic' }}>Thinking...</div>
-              )}
+                );
+              })}
               <div ref={messagesEndRef} />
             </div>
 
