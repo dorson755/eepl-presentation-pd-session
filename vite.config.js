@@ -12,12 +12,18 @@ const localApiPlugin = (kimiApiKey) => ({
       let body = '';
       req.on('data', chunk => body += chunk);
       req.on('end', async () => {
+        let responseSent = false;
+        const send = (status, body) => {
+          if (responseSent) return;
+          responseSent = true;
+          res.writeHead(status, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(body));
+        };
+
         try {
           const { messages } = JSON.parse(body);
           if (!kimiApiKey) {
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'KIMI_API_KEY not set in .env' }));
-            return;
+            return send(500, { error: 'KIMI_API_KEY not set in .env' });
           }
           const upstream = await fetch('https://api.moonshot.cn/v1/chat/completions', {
             method: 'POST',
@@ -25,18 +31,20 @@ const localApiPlugin = (kimiApiKey) => ({
             body: JSON.stringify({
               model: 'moonshot-v1-8k',
               messages: [
-                { role: 'system', content: 'You are an AI Librarian for the Elizabeth Estates Public Library in The Bahamas. You are assisting Darnell Lightbourne during a Professional Development Session for preschool teachers. Your core philosophy is "Every mickle mek a muckle" (every small act adds up). Keep responses concise (under 3 sentences), warm, and encouraging.' },
+                { role: 'system', content: 'You are an AI Librarian for the Elizabeth Estates Public Library in The Bahamas. Your core philosophy is "Every mickle mek a muckle". Keep responses concise (under 3 sentences), warm, and encouraging.' },
                 ...messages
               ]
             })
           });
           const data = await upstream.json();
-          res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ content: data.choices[0].message.content }));
+          if (!upstream.ok || !data.choices) {
+            console.error('[local-api] Kimi error:', JSON.stringify(data));
+            return send(502, { error: data?.error?.message || 'Kimi API error' });
+          }
+          send(200, { content: data.choices[0].message.content });
         } catch (err) {
           console.error('[local-api] error:', err);
-          res.writeHead(500, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ error: err.message }));
+          send(500, { error: err.message });
         }
       });
     });
