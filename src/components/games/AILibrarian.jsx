@@ -41,12 +41,18 @@ const AILibrarian = () => {
         body: JSON.stringify({ messages: newMessages })
       });
 
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      
       const data = await response.json();
-      setMessages([...newMessages, { role: 'assistant', content: data.content }]);
+
+      if (!response.ok) {
+        const errMsg = data?.error || `Error ${response.status}`;
+        console.error('[AILibrarian]', errMsg);
+        setMessages([...newMessages, { role: 'assistant', content: `⚠️ ${errMsg}` }]);
+      } else {
+        setMessages([...newMessages, { role: 'assistant', content: data.content }]);
+      }
     } catch (error) {
-      setMessages([...newMessages, { role: 'assistant', content: "I'm sorry, I'm having trouble connecting to my archives right now. Please try again in a moment." }]);
+      console.error('[AILibrarian] fetch failed:', error);
+      setMessages([...newMessages, { role: 'assistant', content: "I'm sorry, I can't reach my archives right now. Please try again in a moment." }]);
     }
     setLoading(false);
   };
