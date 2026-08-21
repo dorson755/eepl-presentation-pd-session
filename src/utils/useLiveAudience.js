@@ -1,36 +1,40 @@
-import { useEffect, useState } from 'react';
-import { initVotingSession, listenToVoting } from '../firebase';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { updateSessionState, listenToVoting } from '../firebase';
 
-// Hook for the presenter to sync game state with the audience
-export const useLiveAudience = (gameId, initialState) => {
-  const [audienceData, setAudienceData] = useState(initialState);
+export const useLiveAudience = (gameId, initialGameData = null) => {
+  const [audienceData, setAudienceData] = useState(initialGameData);
+  const currentGameDataRef = useRef(initialGameData);
+
+  // Keep ref up to date
+  useEffect(() => {
+    currentGameDataRef.current = initialGameData;
+  }, [initialGameData]);
+
+  // Publish state when active
+  const publishState = useCallback((gameData) => {
+    currentGameDataRef.current = gameData;
+    updateSessionState('live_presentation', {
+      activeGame: gameId,
+      gameData: gameData,
+      updatedAt: Date.now()
+    });
+  }, [gameId]);
 
   useEffect(() => {
-    // When the component mounts, initialize the session
-    initVotingSession('live_presentation', {
-      activeGame: gameId,
-      ...initialState
-    });
-
-    // Listen for audience votes
     const unsubscribe = listenToVoting('live_presentation', (data) => {
-      setAudienceData(data);
+      if (data?.activeGame === gameId && data?.gameData) {
+        setAudienceData(data.gameData);
+      }
     });
 
     return () => {
-      // Clear the active game when unmounting
-      initVotingSession('live_presentation', { activeGame: null });
       unsubscribe();
     };
-  }, [gameId]); // Only re-run if gameId changes
+  }, [gameId]);
 
-  // Function to update the current state (e.g., when the presenter moves to the next question)
-  const updateState = (newState) => {
-    initVotingSession('live_presentation', {
-      activeGame: gameId,
-      ...newState
-    });
+  return { 
+    audienceData, 
+    votes: audienceData?.votes || {}, 
+    publishState 
   };
-
-  return { audienceData, updateState };
 };

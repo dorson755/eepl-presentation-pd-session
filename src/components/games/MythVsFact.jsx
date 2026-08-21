@@ -3,24 +3,37 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { playChime, playErrorTone } from '../../utils/sounds';
 import { useLiveAudience } from '../../utils/useLiveAudience';
 
-const MythVsFact = () => {
+const statements = [
+  { text: "Reading is just about learning letters and recognizing words.", isFact: false, explanation: "Reading develops the whole child—language, thinking, imagination, empathy, and confidence." },
+  { text: "Every story read and rhyme sung shapes a child's future.", isFact: true, explanation: "Small moments become lifelong habits. Every little effort adds up." },
+  { text: "Children naturally know about the diverse world around them.", isFact: false, explanation: "A child's world starts small. Books help them see beyond their own experiences." },
+  { text: "Literacy begins long before a child reads independently.", isFact: true, explanation: "It begins with a voice heard, a page turned, and a picture pointed to." }
+];
+
+const MythVsFact = ({ isActive = true }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [feedback, setFeedback] = useState(null);
   const [score, setScore] = useState(0);
   const [completed, setCompleted] = useState(false);
 
-  const statements = [
-    { text: "Reading is just about learning letters and recognizing words.", isFact: false, explanation: "Reading develops the whole child—language, thinking, imagination, empathy, and confidence." },
-    { text: "Every story read and rhyme sung shapes a child's future.", isFact: true, explanation: "Small moments become lifelong habits. Every little effort adds up." },
-    { text: "Children naturally know about the diverse world around them.", isFact: false, explanation: "A child's world starts small. Books help them see beyond their own experiences." },
-    { text: "Literacy begins long before a child reads independently.", isFact: true, explanation: "It begins with a voice heard, a page turned, and a picture pointed to." }
-  ];
+  const { votes, publishState } = useLiveAudience('MythVsFact');
 
-  const { audienceData, updateState } = useLiveAudience('MythVsFact', {
-    currentIndex: 0,
-    currentStatement: statements[0].text,
-    votes: { fact: 0, myth: 0 }
-  });
+  useEffect(() => {
+    if (isActive && !completed) {
+      publishState({
+        questionId: `mvf-${currentIndex}`,
+        questionNumber: currentIndex + 1,
+        totalQuestions: statements.length,
+        questionText: statements[currentIndex].text,
+        options: [
+          { id: 'fact', label: 'FACT', color: '#10b981' },
+          { id: 'myth', label: 'MYTH', color: '#ef4444' }
+        ],
+        votes: { fact: 0, myth: 0 },
+        isComplete: false
+      });
+    }
+  }, [currentIndex, isActive, completed, publishState]);
 
   const handleGuess = (guessFact) => {
     const current = statements[currentIndex];
@@ -44,15 +57,20 @@ const MythVsFact = () => {
     const nextIndex = currentIndex + 1;
     if (nextIndex < statements.length) {
       setCurrentIndex(nextIndex);
-      updateState({
-        currentIndex: nextIndex,
-        currentStatement: statements[nextIndex].text,
-        votes: { fact: 0, myth: 0 }
-      });
     } else {
       setCompleted(true);
+      publishState({
+        questionId: 'mvf-complete',
+        isComplete: true
+      });
     }
   };
+
+  const factVotes = votes?.fact || 0;
+  const mythVotes = votes?.myth || 0;
+  const totalVotes = factVotes + mythVotes;
+  const factPercent = totalVotes > 0 ? Math.round((factVotes / totalVotes) * 100) : 0;
+  const mythPercent = totalVotes > 0 ? Math.round((mythVotes / totalVotes) * 100) : 0;
 
   return (
     <div className="glass-panel" style={{ padding: '3rem', width: '100%', maxWidth: 800, margin: '0 auto', minHeight: 400 }}>
@@ -79,7 +97,7 @@ const MythVsFact = () => {
                 </p>
               </motion.div>
 
-              <div style={{ display: 'flex', gap: '2rem', marginBottom: '2rem' }}>
+              <div style={{ display: 'flex', gap: '2rem', marginBottom: '1.5rem' }}>
                 <motion.button 
                   whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                   onClick={() => handleGuess(true)}
@@ -87,8 +105,8 @@ const MythVsFact = () => {
                   className="glass-panel hover-lift"
                   style={{ flex: 1, padding: '2rem', fontSize: '2rem', color: '#10b981', border: '2px solid rgba(16,185,129,0.3)', cursor: feedback ? 'default' : 'pointer', position: 'relative', overflow: 'hidden' }}>
                   FACT
-                  {audienceData?.votes?.fact > 0 && (
-                    <div style={{ position: 'absolute', bottom: 0, left: 0, height: '5px', background: '#10b981', width: `${(audienceData.votes.fact / (audienceData.votes.fact + (audienceData.votes.myth || 0))) * 100}%`, transition: 'width 0.3s' }} />
+                  {totalVotes > 0 && (
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, height: '6px', background: '#10b981', width: `${factPercent}%`, transition: 'width 0.3s' }} />
                   )}
                 </motion.button>
                 <motion.button 
@@ -98,19 +116,22 @@ const MythVsFact = () => {
                   className="glass-panel hover-lift"
                   style={{ flex: 1, padding: '2rem', fontSize: '2rem', color: '#ef4444', border: '2px solid rgba(239,68,68,0.3)', cursor: feedback ? 'default' : 'pointer', position: 'relative', overflow: 'hidden' }}>
                   MYTH
-                  {audienceData?.votes?.myth > 0 && (
-                    <div style={{ position: 'absolute', bottom: 0, left: 0, height: '5px', background: '#ef4444', width: `${(audienceData.votes.myth / ((audienceData.votes.fact || 0) + audienceData.votes.myth)) * 100}%`, transition: 'width 0.3s' }} />
+                  {totalVotes > 0 && (
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, height: '6px', background: '#ef4444', width: `${mythPercent}%`, transition: 'width 0.3s' }} />
                   )}
                 </motion.button>
               </div>
               
-              {(audienceData?.votes?.fact > 0 || audienceData?.votes?.myth > 0) && (
-                <div style={{ fontSize: '1rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
-                  Live Audience Votes: {audienceData.votes.fact} Fact | {audienceData.votes.myth} Myth
-                </div>
+              {totalVotes > 0 && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center', gap: '2rem' }}>
+                  <span style={{ color: '#10b981', fontWeight: 'bold' }}>FACT: {factVotes} ({factPercent}%)</span>
+                  <span>•</span>
+                  <span style={{ color: '#ef4444', fontWeight: 'bold' }}>MYTH: {mythVotes} ({mythPercent}%)</span>
+                </motion.div>
               )}
-              <p style={{ marginTop: '2rem', color: 'var(--text-secondary)', fontSize: '1rem' }}>
-                Statement {currentIndex + 1} of {statements.length}
+
+              <p style={{ marginTop: '1rem', color: 'var(--text-secondary)', fontSize: '1rem' }}>
+                Audience can vote live on their devices • Click Fact/Myth on screen to reveal answer
               </p>
             </motion.div>
           ) : (
@@ -138,24 +159,18 @@ const MythVsFact = () => {
           )}
         </AnimatePresence>
       ) : (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+        <motion.div 
+          initial={{ opacity: 0 }} 
+          animate={{ opacity: 1 }}
           style={{ textAlign: 'center' }}
         >
-          <h4 style={{ fontSize: '3rem', marginBottom: '1rem', color: '#34d399' }}>
-            Complete!
-          </h4>
+          <h4 style={{ fontSize: '2rem', marginBottom: '1.5rem' }}>Activity Complete!</h4>
           <p style={{ fontSize: '1.5rem', marginBottom: '2rem' }}>
-            You scored {score} out of {statements.length}.
+            Score: <span className="text-gradient-accent" style={{ fontWeight: 'bold' }}>{score}</span> / {statements.length}
           </p>
-          <motion.button 
-            className="btn btn-glass"
-            onClick={() => { setCurrentIndex(0); setScore(0); setCompleted(false); setFeedback(null); }}
-            whileHover={{ scale: 1.05 }}
-          >
-            Play Again
-          </motion.button>
+          <p style={{ color: 'var(--text-secondary)' }}>
+            Every small habit builds the foundation for lifelong learning.
+          </p>
         </motion.div>
       )}
     </div>

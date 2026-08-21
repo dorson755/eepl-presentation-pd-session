@@ -29,7 +29,7 @@ const localApiPlugin = (kimiApiKey) => ({
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${kimiApiKey}` },
             body: JSON.stringify({
-              model: 'moonshot-v1-8k',
+              model: 'kimi-k2.6',
               messages: [
                 { role: 'system', content: 'You are an AI Librarian for the Elizabeth Estates Public Library in The Bahamas. Your core philosophy is "Every mickle mek a muckle". Keep responses concise (under 3 sentences), warm, and encouraging.' },
                 ...messages

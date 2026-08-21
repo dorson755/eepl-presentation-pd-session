@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Deck, Slide, Appear, Notes } from 'spectacle';
 import { motion } from 'framer-motion';
 
@@ -12,9 +12,48 @@ import PdfTakeaway from '../../components/games/PdfTakeaway';
 import ThreeBackground from '../../components/ThreeBackground';
 import AILibrarian from '../../components/games/AILibrarian';
 import QRCode from 'react-qr-code';
+import { updateSessionState } from '../../firebase';
 
-const CustomProgress = ({ slideNumber, numberOfSlides }) => {
-  const progress = (slideNumber / numberOfSlides) * 100;
+const SLIDE_INFO = [
+  { index: 0, title: "Building Strong Foundations", subtitle: "Literacy as the Heart of Early Learning", activeGame: null },
+  { index: 1, title: "Every Mickle Mek a Muckle", subtitle: "Small moments in a classroom become lifelong habits.", activeGame: null },
+  { index: 2, title: "Myth vs. Fact", subtitle: "Interactive Audience Quiz", activeGame: "MythVsFact" },
+  { index: 3, title: "Whole-Child Literacy", subtitle: "Listening, Speaking, Reading, Writing", activeGame: null },
+  { index: 4, title: "The Teacher's Responsibility", subtitle: "Read with expression • Invite questions • Make reading everyday", activeGame: null },
+  { index: 5, title: "Expanding a Child's World", subtitle: "A child's world starts small. Books lovingly widen it.", activeGame: null },
+  { index: 6, title: "Classroom Scenario", subtitle: "Interactive Problem Solving", activeGame: "ScenarioQuiz" },
+  { index: 7, title: "The Digital World", subtitle: "Complements vs. Replacements", activeGame: "DigitalSorting" },
+  { index: 8, title: "Recommended Bahamian Books", subtitle: "Curated Library Collection", activeGame: null },
+  { index: 9, title: "Closing & Reflections", subtitle: "Every mickle mek a muckle", activeGame: "takeaway" }
+];
+
+const SlideSync = ({ slideNumber = 0, numberOfSlides = 10 }) => {
+  const lastSlideRef = useRef(null);
+
+  useEffect(() => {
+    if (slideNumber === lastSlideRef.current) return;
+    lastSlideRef.current = slideNumber;
+
+    const info = SLIDE_INFO[slideNumber] || {
+      index: slideNumber,
+      title: `Slide ${slideNumber + 1}`,
+      subtitle: "Live Presentation",
+      activeGame: null
+    };
+
+    // If on a non-game slide (or closing), push general slide state so audience screen updates
+    if (!info.activeGame || info.activeGame === 'takeaway') {
+      updateSessionState('live_presentation', {
+        slideIndex: slideNumber,
+        slideTitle: info.title,
+        slideSubtitle: info.subtitle,
+        activeGame: info.activeGame,
+        gameData: null
+      });
+    }
+  }, [slideNumber]);
+
+  const progress = ((slideNumber + 1) / numberOfSlides) * 100;
   return (
     <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '8px', background: 'rgba(255,255,255,0.05)', zIndex: 100 }}>
       <motion.div 
@@ -58,7 +97,14 @@ const PdSession = () => {
     <div className="presentation-wrapper theme-presentation">
       <ThreeBackground />
       <AILibrarian />
-      <Deck theme={theme} transition={{ type: 'fade', duration: 0.6 }} backgroundColor="transparent" template={CustomProgress}>
+      <Deck 
+        theme={theme} 
+        transition={{ type: 'fade', duration: 0.6 }} 
+        backgroundColor="transparent" 
+        template={({ slideNumber, numberOfSlides }) => (
+          <SlideSync slideNumber={slideNumber} numberOfSlides={numberOfSlides} />
+        )}
+      >
         
         {/* Slide 1: Title Slide */}
         <Slide>
@@ -76,12 +122,12 @@ const PdSession = () => {
                 </p>
               </motion.div>
               
-              <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 1 }} style={{ background: 'white', padding: '1rem', borderRadius: '12px', display: 'inline-block', marginTop: '3rem' }}>
+              <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 1 }} style={{ background: 'white', padding: '1rem', borderRadius: '12px', display: 'inline-block', marginTop: '2.5rem' }}>
                 <QRCode value={`${window.location.protocol}//${window.location.host}/audience`} size={120} />
-                <p style={{ color: 'black', margin: '0.5rem 0 0', fontWeight: 'bold', fontSize: '1rem' }}>Scan to Join Live Polling</p>
+                <p style={{ color: 'black', margin: '0.5rem 0 0', fontWeight: 'bold', fontSize: '0.95rem' }}>Scan to Join Live Polling</p>
               </motion.div>
 
-              <div style={{ width: '60px', height: '4px', background: 'var(--accent-primary)', margin: '2rem auto', borderRadius: '2px' }} />
+              <div style={{ width: '60px', height: '4px', background: 'var(--accent-primary)', margin: '1.5rem auto', borderRadius: '2px' }} />
               <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', opacity: 0.7 }}>
                 Darnell Lightbourne • Elizabeth Estates Public Library • Commonwealth of The Bahamas
               </p>
@@ -140,7 +186,7 @@ const PdSession = () => {
           </Notes>
         </Slide>
 
-        {/* Slide 4: Teacher's Responsibility */}
+        {/* Slide 5: Teacher's Responsibility */}
         <Slide>
           <div style={slideContainerStyle}>
             <h2 className="text-gradient" style={{ fontSize: '3.5rem', marginBottom: '4rem' }}>
@@ -162,7 +208,7 @@ const PdSession = () => {
           </div>
         </Slide>
 
-        {/* Slide 5: Expanding a Child's World */}
+        {/* Slide 6: Expanding a Child's World */}
         <Slide>
           <div style={slideContainerStyle}>
             <h2 className="text-gradient" style={{ fontSize: '3.5rem', marginBottom: '3rem' }}>
@@ -189,7 +235,7 @@ const PdSession = () => {
           </div>
         </Slide>
 
-        {/* Slide 6: Interactive Scenario */}
+        {/* Slide 7: Interactive Scenario */}
         <Slide>
           <div style={slideContainerStyle}>
             <ScenarioQuiz />
@@ -203,7 +249,7 @@ const PdSession = () => {
           </div>
         </Slide>
 
-        {/* Slide 8: Interactive Book Reveal */}
+        {/* Slide 9: Interactive Book Reveal */}
         <Slide>
           <div style={slideContainerStyle}>
             <BookReveal />

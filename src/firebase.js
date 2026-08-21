@@ -13,12 +13,15 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
-// Simple API for the presentation games to hook into
-export const initVotingSession = async (sessionId, initialData) => {
+// Set full session state (replaces document to avoid stale leftover keys)
+export const updateSessionState = async (sessionId, data) => {
   const ref = doc(db, 'sessions', sessionId);
-  await setDoc(ref, initialData, { merge: true });
+  await setDoc(ref, { ...data, updatedAt: Date.now() });
   return ref;
 };
+
+// Backward-compatible alias
+export const initVotingSession = updateSessionState;
 
 export const listenToVoting = (sessionId, callback) => {
   const ref = doc(db, 'sessions', sessionId);
@@ -28,3 +31,4 @@ export const listenToVoting = (sessionId, callback) => {
     }
   });
 };
+
