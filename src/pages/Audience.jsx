@@ -1,19 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { db, listenToVoting } from '../firebase';
 import { doc, updateDoc, increment } from 'firebase/firestore';
-import { Sparkles, Check, X } from 'lucide-react';
+import { Sparkles, Check } from 'lucide-react';
 
 const Audience = () => {
   const [activeSession, setActiveSession] = useState(null);
   const [voted, setVoted] = useState(false);
+  // Track the last game+question we voted on so we only reset when it actually changes
+  const lastVotedKeyRef = useRef(null);
 
   useEffect(() => {
-    // Listen to the global "live" session to know which game is active
     const unsubscribe = listenToVoting('live_presentation', (data) => {
-      setActiveSession(data);
-      // Reset vote status if the game changes or resets
-      setVoted(false);
+      setActiveSession(prev => {
+        // Build a key representing the current question
+        const newKey = `${data?.activeGame}-${data?.currentIndex ?? data?.currentItem}`;
+        const oldKey = lastVotedKeyRef.current;
+        
+        // Only reset voted if the question itself changed
+        if (newKey !== oldKey) {
+          setVoted(false);
+        }
+        
+        return data;
+      });
     });
     return () => unsubscribe();
   }, []);
@@ -21,14 +31,18 @@ const Audience = () => {
   const handleVote = async (option) => {
     if (!activeSession || voted) return;
     
+    const voteKey = `${activeSession?.activeGame}-${activeSession?.currentIndex ?? activeSession?.currentItem}`;
+    
     try {
       setVoted(true);
+      lastVotedKeyRef.current = voteKey; // lock in this question as voted
       const ref = doc(db, 'sessions', 'live_presentation');
       await updateDoc(ref, {
         [`votes.${option}`]: increment(1)
       });
     } catch (e) {
       console.error(e);
+      lastVotedKeyRef.current = null;
       setVoted(false);
     }
   };

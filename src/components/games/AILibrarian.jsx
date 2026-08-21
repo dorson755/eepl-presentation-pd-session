@@ -1,13 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Sparkles } from 'lucide-react';
-import OpenAI from 'openai';
-
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_KIMI_API_KEY,
-  baseURL: 'https://api.moonshot.cn/v1',
-  dangerouslyAllowBrowser: true
-});
 
 const AILibrarian = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,17 +35,18 @@ const AILibrarian = () => {
     setLoading(true);
 
     try {
-      const response = await openai.chat.completions.create({
-        model: "moonshot-v1-8k",
-        messages: [
-          { role: 'system', content: 'You are an AI Librarian for the Elizabeth Estates Public Library in The Bahamas. You are assisting Darnell Lightbourne during a Professional Development Session for preschool teachers. Your core philosophy is "Every mickle mek a muckle" (every small act adds up). Emphasize that literacy is whole-child development (listening, speaking, reading, writing). Keep responses concise (under 3 sentences), warm, and encouraging. Use British/Bahamian spelling where appropriate.' },
-          ...newMessages
-        ]
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: newMessages })
       });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       
-      setMessages([...newMessages, { role: 'assistant', content: response.choices[0].message.content }]);
+      const data = await response.json();
+      setMessages([...newMessages, { role: 'assistant', content: data.content }]);
     } catch (error) {
-      setMessages([...newMessages, { role: 'assistant', content: "I'm sorry, I'm having trouble connecting to my archives right now. (API Error)" }]);
+      setMessages([...newMessages, { role: 'assistant', content: "I'm sorry, I'm having trouble connecting to my archives right now. Please try again in a moment." }]);
     }
     setLoading(false);
   };
