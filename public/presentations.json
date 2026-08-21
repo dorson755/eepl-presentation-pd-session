@@ -1,0 +1,13 @@
+{
+  "presentations": [
+    {
+      "id": "pd-session",
+      "title": "Professional Development Session",
+      "description": "Building Strong Foundations: Literacy as the Heart of Early Learning",
+      "path": "/presentation/pd-session",
+      "icon": "BookOpen",
+      "scriptUrl": "/scripts/pd-session-script.html",
+      "scriptName": "pd-session-script.html"
+    }
+  ]
+}
