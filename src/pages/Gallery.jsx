@@ -34,7 +34,7 @@ const Gallery = () => {
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="gallery-container"
       variants={containerVariants}
       initial="hidden"
@@ -50,7 +50,7 @@ const Gallery = () => {
           <Library className="card-icon" style={{ margin: '0 auto 1.5rem', width: 80, height: 80 }} />
         </motion.div>
         <motion.h1 variants={itemVariants} className="text-gradient">Presentation Gallery</motion.h1>
-        <motion.p variants={itemVariants}>A collection of interactive, God-Tier presentations designed to captivate and educate.</motion.p>
+        <motion.p variants={itemVariants}>A collection of interactive presentations designed to captivate and educate.</motion.p>
       </header>
 
       <motion.div className="presentation-grid" variants={itemVariants}>
@@ -63,7 +63,7 @@ const Gallery = () => {
               whileTap={{ scale: 0.97 }}
             >
               <div className="glass-panel presentation-card hover-lift" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <motion.div 
+                <motion.div
                   className="card-icon"
                   whileHover={{ rotate: 15, scale: 1.1 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 15 }}
