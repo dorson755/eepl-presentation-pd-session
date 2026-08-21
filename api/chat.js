@@ -9,20 +9,27 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid request body' });
   }
 
-  const apiKey = process.env.KIMI_API_KEY;
+  // Prefer Groq (fast, free, US-based); fall back to Kimi if Groq key is absent.
+  const useGroq = Boolean(process.env.GROQ_API_KEY);
+  const apiKey = useGroq ? process.env.GROQ_API_KEY : process.env.KIMI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'KIMI_API_KEY environment variable not set' });
+    return res.status(500).json({ error: 'GROQ_API_KEY or KIMI_API_KEY environment variable not set' });
   }
 
+  const endpoint = useGroq
+    ? 'https://api.groq.com/openai/v1/chat/completions'
+    : 'https://api.moonshot.cn/v1/chat/completions';
+  const model = useGroq ? 'llama-3.3-70b-versatile' : 'kimi-k2.6';
+
   try {
-    const upstream = await fetch('https://api.moonshot.cn/v1/chat/completions', {
+    const upstream = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'kimi-k2.6',
+        model,
         messages: [
           {
             role: 'system',
@@ -36,8 +43,8 @@ export default async function handler(req, res) {
     const data = await upstream.json();
 
     if (!upstream.ok || !data.choices) {
-      console.error('Kimi API error:', JSON.stringify(data));
-      return res.status(502).json({ error: data?.error?.message || 'Kimi API error' });
+      console.error('LLM API error:', JSON.stringify(data));
+      return res.status(502).json({ error: data?.error?.message || 'LLM API error' });
     }
 
     return res.status(200).json({ content: data.choices[0].message.content });
