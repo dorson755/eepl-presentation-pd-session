@@ -1,7 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BookOpen, Sparkles, ChevronRight, Library } from 'lucide-react';
+import { BookOpen, ChevronRight, Library, Download } from 'lucide-react';
+
+const presentations = [
+  {
+    id: 'pd-session',
+    title: 'Professional Development Session',
+    description: 'Building Strong Foundations: Literacy as the Heart of Early Learning',
+    path: '/presentation/pd-session',
+    icon: BookOpen,
+    scriptUrl: '/scripts/pd-session-script.html',
+    scriptName: 'pd-session-script.html'
+  }
+  // Add future presentations here — drop the script file in public/scripts/
+  // and set scriptUrl to '/scripts/your-file.ext'
+];
 
 const Gallery = () => {
   const containerVariants = {
@@ -40,35 +54,79 @@ const Gallery = () => {
       </header>
 
       <motion.div className="presentation-grid" variants={itemVariants}>
-        <motion.div
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-        >
-          <Link to="/presentation/pd-session" className="glass-panel presentation-card hover-lift">
-            <motion.div 
-              className="card-icon"
-              whileHover={{ rotate: 15, scale: 1.1 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+        {presentations.map((pres) => {
+          const Icon = pres.icon;
+          return (
+            <motion.div
+              key={pres.id}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
             >
-              <BookOpen size={28} />
+              <div className="glass-panel presentation-card hover-lift" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <motion.div 
+                  className="card-icon"
+                  whileHover={{ rotate: 15, scale: 1.1 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                >
+                  <Icon size={28} />
+                </motion.div>
+                <div className="card-content">
+                  <h3 className="text-gradient-accent">{pres.title}</h3>
+                  <p>{pres.description}</p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: 'auto', paddingTop: '1.5rem' }}>
+                  <Link
+                    to={pres.path}
+                    style={{
+                      flex: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.25rem',
+                      color: 'var(--accent-primary)',
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                      padding: '0.75rem',
+                      borderRadius: '10px',
+                      border: '1px solid var(--accent-primary)',
+                      transition: 'background 0.2s'
+                    }}
+                  >
+                    Launch Presentation
+                    <ChevronRight size={20} />
+                  </Link>
+                  {pres.scriptUrl && (
+                    <motion.a
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      href={pres.scriptUrl}
+                      download={pres.scriptName}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.4rem',
+                        padding: '0.75rem 1rem',
+                        borderRadius: '10px',
+                        border: '1px solid var(--border-glass)',
+                        color: 'var(--text-secondary)',
+                        textDecoration: 'none',
+                        fontWeight: 600,
+                        fontSize: '0.9rem',
+                        whiteSpace: 'nowrap',
+                        cursor: 'pointer'
+                      }}
+                      title="Download accompanying script"
+                    >
+                      <Download size={18} />
+                      Script
+                    </motion.a>
+                  )}
+                </div>
+              </div>
             </motion.div>
-            <div className="card-content">
-              <h3 className="text-gradient-accent">Professional Development Session</h3>
-              <p>Building Strong Foundations: Literacy as the Heart of Early Learning</p>
-            </div>
-            <motion.div 
-              style={{ display: 'flex', alignItems: 'center', color: 'var(--accent-primary)', marginTop: 'auto', paddingTop: '1.5rem', fontWeight: 600 }}
-              initial="rest"
-              whileHover="hover"
-              animate="rest"
-            >
-              Launch Presentation 
-              <motion.div variants={{ rest: { x: 0 }, hover: { x: 5 } }}>
-                <ChevronRight size={20} style={{ marginLeft: 6 }} />
-              </motion.div>
-            </motion.div>
-          </Link>
-        </motion.div>
+          );
+        })}
       </motion.div>
     </motion.div>
   );
