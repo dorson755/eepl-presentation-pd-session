@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { playChime, playErrorTone } from '../../utils/sounds';
 import { useLiveAudience } from '../../utils/useLiveAudience';
+import { SlideContext } from 'spectacle';
 
 const initialItems = [
   { id: '1', text: 'Using educational apps together with child interaction', type: 'helpful' },
@@ -10,7 +11,8 @@ const initialItems = [
   { id: '4', text: 'Replacing bedtime storybooks entirely with solo screen time', type: 'harmful' }
 ];
 
-const DigitalSorting = ({ isActive = true }) => {
+const DigitalSorting = () => {
+  const { isSlideActive } = useContext(SlideContext);
   const [items, setItems] = useState(initialItems);
   const [helpfulItems, setHelpfulItems] = useState([]);
   const [harmfulItems, setHarmfulItems] = useState([]);
@@ -21,7 +23,7 @@ const DigitalSorting = ({ isActive = true }) => {
   const { votes, publishState } = useLiveAudience('DigitalSorting');
 
   useEffect(() => {
-    if (isActive && currentItem && !completed) {
+    if (isSlideActive && currentItem && !completed) {
       publishState({
         questionId: `sort-${currentItem.id}`,
         questionNumber: initialItems.length - items.length + 1,
@@ -34,13 +36,13 @@ const DigitalSorting = ({ isActive = true }) => {
         votes: { helpful: 0, harmful: 0 },
         isComplete: false
       });
-    } else if (isActive && completed) {
+    } else if (isSlideActive && completed) {
       publishState({
         questionId: 'sort-complete',
         isComplete: true
       });
     }
-  }, [items, currentItem, isActive, completed, publishState]);
+  }, [items, currentItem, isSlideActive, completed, publishState]);
 
   const handleSort = (item, category) => {
     setErrorMsg('');

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { playChime, playErrorTone } from '../../utils/sounds';
 import { useLiveAudience } from '../../utils/useLiveAudience';
+import { SlideContext } from 'spectacle';
 
 const statements = [
   { text: "Reading is just about learning letters and recognizing words.", isFact: false, explanation: "Reading develops the whole child—language, thinking, imagination, empathy, and confidence." },
@@ -10,7 +11,8 @@ const statements = [
   { text: "Literacy begins long before a child reads independently.", isFact: true, explanation: "It begins with a voice heard, a page turned, and a picture pointed to." }
 ];
 
-const MythVsFact = ({ isActive = true }) => {
+const MythVsFact = () => {
+  const { isSlideActive } = useContext(SlideContext);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [feedback, setFeedback] = useState(null);
   const [score, setScore] = useState(0);
@@ -19,7 +21,7 @@ const MythVsFact = ({ isActive = true }) => {
   const { votes, publishState } = useLiveAudience('MythVsFact');
 
   useEffect(() => {
-    if (isActive && !completed) {
+    if (isSlideActive && !completed) {
       publishState({
         questionId: `mvf-${currentIndex}`,
         questionNumber: currentIndex + 1,
@@ -33,7 +35,7 @@ const MythVsFact = ({ isActive = true }) => {
         isComplete: false
       });
     }
-  }, [currentIndex, isActive, completed, publishState]);
+  }, [currentIndex, isSlideActive, completed, publishState]);
 
   const handleGuess = (guessFact) => {
     const current = statements[currentIndex];

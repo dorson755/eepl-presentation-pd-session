@@ -41,16 +41,15 @@ const SlideSync = ({ slideNumber = 0, numberOfSlides = 10 }) => {
       activeGame: null
     };
 
-    // If on a non-game slide (or closing), push general slide state so audience screen updates
-    if (!info.activeGame || info.activeGame === 'takeaway') {
-      updateSessionState('live_presentation', {
-        slideIndex: slideNumber,
-        slideTitle: info.title,
-        slideSubtitle: info.subtitle,
-        activeGame: info.activeGame,
-        gameData: null
-      });
-    }
+    // ALWAYS update basic session info so Audience knows the active game
+    updateSessionState('live_presentation', {
+      slideIndex: slideNumber,
+      slideTitle: info.title,
+      slideSubtitle: info.subtitle,
+      activeGame: info.activeGame,
+      // If not a game (or takeaway), clear the gameData
+      ...(info.activeGame && info.activeGame !== 'takeaway' ? {} : { gameData: null })
+    });
   }, [slideNumber]);
 
   const progress = ((slideNumber + 1) / numberOfSlides) * 100;

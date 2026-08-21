@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { playChime, playErrorTone } from '../../utils/sounds';
 import { useLiveAudience } from '../../utils/useLiveAudience';
+import { SlideContext } from 'spectacle';
 
 const scenario = "A parent tells you they don't have time to read books with their child every night because of their work schedule. What is the best response?";
 
@@ -26,14 +27,15 @@ const options = [
   }
 ];
 
-const ScenarioQuiz = ({ isActive = true }) => {
+const ScenarioQuiz = () => {
+  const { isSlideActive } = useContext(SlideContext);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showExplanation, setShowExplanation] = useState(false);
 
   const { votes, publishState } = useLiveAudience('ScenarioQuiz');
 
   useEffect(() => {
-    if (isActive) {
+    if (isSlideActive) {
       publishState({
         questionId: 'scenario-0',
         questionNumber: 1,
@@ -44,7 +46,7 @@ const ScenarioQuiz = ({ isActive = true }) => {
         isComplete: false
       });
     }
-  }, [isActive, publishState]);
+  }, [isSlideActive, publishState]);
 
   const handleSelect = (option) => {
     setSelectedAnswer(option.id);
