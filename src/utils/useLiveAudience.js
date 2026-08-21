@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { updateSessionState, listenToVoting } from '../firebase';
+import { doc, updateDoc, setDoc } from 'firebase/firestore';
+import { db, listenToVoting } from '../firebase';
 
 export const useLiveAudience = (gameId, initialGameData = null) => {
   const [audienceData, setAudienceData] = useState(initialGameData);
@@ -10,13 +11,25 @@ export const useLiveAudience = (gameId, initialGameData = null) => {
     currentGameDataRef.current = initialGameData;
   }, [initialGameData]);
 
-  // Publish state when active
+  // Publish state when active.
+  // Uses updateDoc (not setDoc with merge) so that gameData is REPLACED
+  // entirely — clearing stale vote keys from previous games (e.g. leftover
+  // 'helpful'/'harmful' keys from DigitalSorting bleeding into MythVsFact's
+  // 'fact'/'myth' totals). Falls back to setDoc if the document doesn't
+  // exist yet (e.g. publishState fires before SlideSync creates the document).
   const publishState = useCallback((gameData) => {
     currentGameDataRef.current = gameData;
-    updateSessionState('live_presentation', {
+    const ref = doc(db, 'sessions', 'live_presentation');
+    updateDoc(ref, {
       activeGame: gameId,
       gameData: gameData,
       updatedAt: Date.now()
+    }).catch(() => {
+      setDoc(ref, {
+        activeGame: gameId,
+        gameData: gameData,
+        updatedAt: Date.now()
+      }, { merge: true });
     });
   }, [gameId]);
 
