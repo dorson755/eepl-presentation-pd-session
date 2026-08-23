@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Deck, Slide, Appear, Notes } from 'spectacle';
 import { motion } from 'framer-motion';
 
@@ -95,6 +95,15 @@ const slideContainerStyle = {
 };
 
 const PdSession = () => {
+  const [shortLink, setShortLink] = useState('');
+
+  useEffect(() => {
+    fetch('/api/short-link')
+      .then(r => r.json())
+      .then(data => setShortLink(data.shortUrl || ''))
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="presentation-wrapper theme-presentation">
       <ThreeBackground />
@@ -125,10 +134,10 @@ const PdSession = () => {
               </motion.div>
               
               <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 1 }} style={{ background: 'white', padding: '1rem', borderRadius: '12px', display: 'inline-block', marginTop: '2.5rem' }}>
-                <QRCode value={`${window.location.protocol}//${window.location.host}/join`} size={120} />
+                <QRCode value={`${window.location.protocol}//${window.location.host}/audience`} size={120} />
                 <p style={{ color: 'black', margin: '0.5rem 0 0', fontWeight: 'bold', fontSize: '0.95rem' }}>Scan to Join Live Polling</p>
                 <p style={{ color: '#666', margin: '0.4rem 0 0', fontSize: '0.85rem' }}>or visit:</p>
-                <p style={{ color: '#0f4761', margin: '0.2rem 0 0', fontWeight: 'bold', fontSize: '1rem', fontFamily: 'monospace' }}>{window.location.host}/join</p>
+                <p style={{ color: '#0f4761', margin: '0.2rem 0 0', fontWeight: 'bold', fontSize: '1rem', fontFamily: 'monospace' }}>{shortLink || 'Loading…'}</p>
               </motion.div>
 
               <div style={{ width: '60px', height: '4px', background: 'var(--accent-primary)', margin: '1.5rem auto', borderRadius: '2px' }} />
