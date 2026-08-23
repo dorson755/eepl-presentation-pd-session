@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Gallery from './pages/Gallery';
 import PdSession from './presentations/PdSession/PdSession';
 import Audience from './pages/Audience';
@@ -14,6 +15,7 @@ function App() {
         <Route path="/audience" element={<Audience />} />
         <Route path="/admin" element={<Admin />} />
       </Routes>
+      <Analytics />
     </div>
   );
 }
