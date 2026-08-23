@@ -79,6 +79,9 @@ const theme = {
   fonts: {
     header: 'var(--font-display)',
     text: 'var(--font-primary)'
+  },
+  backdropStyle: {
+    background: 'transparent'
   }
 };
 
@@ -108,10 +111,11 @@ const PdSession = () => {
     <div className="presentation-wrapper theme-presentation">
       <ThreeBackground />
       <AILibrarian />
-      <Deck 
-        theme={theme} 
-        transition={{ type: 'fade', duration: 0.6 }} 
-        backgroundColor="transparent" 
+      <Deck
+        theme={theme}
+        transition={{ type: 'fade', duration: 0.6 }}
+        backgroundColor="transparent"
+        suppressBackdropFallback
         template={({ slideNumber, numberOfSlides }) => (
           <SlideSync slideNumber={slideNumber} numberOfSlides={numberOfSlides} />
         )}
