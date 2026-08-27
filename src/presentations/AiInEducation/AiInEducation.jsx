@@ -15,17 +15,18 @@ const SLIDE_INFO = [
   { index: 2, title: "(the other) Accessibility", subtitle: "Redefining access", activeGame: null },
   { index: 3, title: "When Tech Sounds Deeper Than It Is", subtitle: "Pseudo-profundity", activeGame: null },
   { index: 4, title: "AI or Human?", subtitle: "Interactive guessing game", activeGame: "AiOrHuman" },
-  { index: 5, title: "AI Is Already in Teachers' Hands", subtitle: "Real classroom use", activeGame: null },
-  { index: 6, title: "What AI Actually Gives Teachers", subtitle: "Assistant, partner, tutor", activeGame: "LivePoll" },
-  { index: 7, title: "Live Challenge: Let's Build Something Useful", subtitle: "Interactive prompt demo", activeGame: "PromptBuilder" },
-  { index: 8, title: "Where Do I Actually Go to Use AI?", subtitle: "Tools and entry points", activeGame: null },
-  { index: 9, title: "From Lesson to Experience", subtitle: "Gamification and amplification", activeGame: null },
-  { index: 10, title: "AI Can Also Improve Learner Access", subtitle: "Accessibility for learners", activeGame: null },
-  { index: 11, title: "Use It, But Use It Wisely", subtitle: "Guardrails and judgment", activeGame: "LivePoll" },
-  { index: 12, title: "The Best Time to Start Is Small", subtitle: "Closing", activeGame: null }
+  { index: 5, title: "The Good, the Bad, and the Ugly", subtitle: "Honest look at AI", activeGame: null },
+  { index: 6, title: "AI Is Already in Teachers' Hands", subtitle: "Real classroom use", activeGame: null },
+  { index: 7, title: "What AI Actually Gives Teachers", subtitle: "Assistant, partner, tutor", activeGame: "LivePoll" },
+  { index: 8, title: "Live Challenge: Let's Build Something Useful", subtitle: "Interactive prompt demo", activeGame: "PromptBuilder" },
+  { index: 9, title: "Where Do I Actually Go to Use AI?", subtitle: "Tools and entry points", activeGame: null },
+  { index: 10, title: "From Lesson to Experience", subtitle: "Gamification and amplification", activeGame: null },
+  { index: 11, title: "AI Can Also Improve Learner Access", subtitle: "Accessibility for learners", activeGame: null },
+  { index: 12, title: "Use It, But Use It Wisely", subtitle: "Guardrails and judgment", activeGame: "LivePoll" },
+  { index: 13, title: "The Best Time to Start Is Small", subtitle: "Closing", activeGame: null }
 ];
 
-const SlideSync = ({ slideNumber = 1, numberOfSlides = 13 }) => {
+const SlideSync = ({ slideNumber = 1, numberOfSlides = 14 }) => {
   const lastSlideRef = useRef(null);
 
   useEffect(() => {
@@ -322,7 +323,68 @@ const AiInEducation = () => {
           </Notes>
         </Slide>
 
-        {/* Slide 6: Teachers Already Using It */}
+        {/* Slide 6: The Good, the Bad, and the Ugly */}
+        <Slide>
+          <div style={slideContainerStyle}>
+            <h2 className="text-gradient-accent" style={{ fontSize: '3.4rem', marginBottom: '0.5rem' }}>
+              The Good, the Bad, and the Ugly
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1.3rem', marginBottom: '2rem' }}>
+              An honest look at what AI actually brings into a classroom.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', width: '95%', textAlign: 'left' }}>
+              <Appear>
+                <div className="glass-panel hover-lift" style={{ padding: '1.75rem', borderTop: '4px solid #22c55e', height: '100%' }}>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>😇</div>
+                  <h3 style={{ fontSize: '1.4rem', marginBottom: '1rem', color: '#22c55e' }}>The Good</h3>
+                  <ul style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7, paddingLeft: '1.25rem', margin: 0 }}>
+                    <li>Saves time on repetitive tasks</li>
+                    <li>Generates ideas and starting points</li>
+                    <li>Helps differentiate for varied learners</li>
+                    <li>Lowers barriers to creating materials</li>
+                  </ul>
+                </div>
+              </Appear>
+              <Appear>
+                <div className="glass-panel hover-lift" style={{ padding: '1.75rem', borderTop: '4px solid #f59e0b', height: '100%' }}>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>😬</div>
+                  <h3 style={{ fontSize: '1.4rem', marginBottom: '1rem', color: '#f59e0b' }}>The Bad</h3>
+                  <ul style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7, paddingLeft: '1.25rem', margin: 0 }}>
+                    <li>Hallucinations and false information</li>
+                    <li>Bias in generated content</li>
+                    <li>Privacy and data concerns</li>
+                    <li>Risk of over-reliance</li>
+                  </ul>
+                </div>
+              </Appear>
+              <Appear>
+                <div className="glass-panel hover-lift" style={{ padding: '1.75rem', borderTop: '4px solid #ef4444', height: '100%' }}>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>🤠</div>
+                  <h3 style={{ fontSize: '1.4rem', marginBottom: '1rem', color: '#ef4444' }}>The Ugly</h3>
+                  <ul style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7, paddingLeft: '1.25rem', margin: 0 }}>
+                    <li>Cheating and academic dishonesty</li>
+                    <li>Deepfakes and misinformation</li>
+                    <li>Job-loss anxiety among educators</li>
+                    <li>Ethical misuse in high-stakes decisions</li>
+                  </ul>
+                </div>
+              </Appear>
+            </div>
+            <Appear>
+              <motion.div className="glass-panel" style={{ marginTop: '2rem', padding: '1.25rem 2rem', maxWidth: '900px' }} whileHover={{ scale: 1.01 }}>
+                <p style={{ fontSize: '1.4rem', fontStyle: 'italic', color: 'var(--text-secondary)' }}>
+                  "The goal is not to ignore the risks. It is to keep the good, manage the bad, and prevent the ugly."
+                </p>
+              </motion.div>
+            </Appear>
+          </div>
+          <Notes>
+            Give a balanced reality check after the AI or Human game. AI can sound human and be useful, but it also has real risks.
+            The three categories help the audience hold both hope and caution at the same time.
+          </Notes>
+        </Slide>
+
+        {/* Slide 7: Teachers Already Using It */}
         <Slide>
           <div style={slideContainerStyle}>
             <h2 className="text-gradient" style={{ fontSize: '3.8rem', marginBottom: '1rem' }}>
