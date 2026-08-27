@@ -8,6 +8,15 @@
       "icon": "BookOpen",
       "scriptUrl": "/scripts/pd-session-script.html",
       "scriptName": "pd-session-script.html"
+    },
+    {
+      "id": "ai-in-education",
+      "title": "AI in Education",
+      "description": "AI in Education: Closer Than People Think — practical, within reach, and already useful in real classrooms.",
+      "path": "/presentation/ai-in-education",
+      "icon": "FileText",
+      "scriptUrl": "/scripts/ai-in-education-script.html",
+      "scriptName": "ai-in-education-script.html"
     }
   ]
 }

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI in Education Script — With Slide Cues</title>
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --muted: #555;
+    --accent: #3b82f6;
+    --press-bg: #fef3c7;
+    --press-border: #f59e0b;
+    --press-text: #92400e;
+    --game-bg: #dbeafe;
+    --game-border: #3b82f6;
+    --game-text: #1e40af;
+    --slide-bg: #f0f4f8;
+    --slide-border: #3b82f6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    color: var(--ink);
+    line-height: 1.8;
+    font-size: 17px;
+  }
+  h1 {
+    font-size: 1.8rem;
+    color: var(--accent);
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .slide-header {
+    background: var(--slide-bg);
+    border-left: 5px solid var(--slide-border);
+    padding: 0.75rem 1.25rem;
+    margin: 2.5rem 0 1rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--slide-border);
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+  }
+  .slide-header .slide-num {
+    display: inline-block;
+    background: var(--slide-border);
+    color: white;
+    border-radius: 6px;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+  }
+  p { margin: 0 0 1rem; }
+  .press {
+    display: inline-block;
+    background: var(--press-bg);
+    border: 1.5px solid var(--press-border);
+    color: var(--press-text);
+    padding: 0.15rem 0.7rem;
+    border-radius: 6px;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    vertical-align: middle;
+    margin: 0 0.15rem;
+  }
+  .press::before { content: "▶ "; }
+  .game {
+    display: block;
+    background: var(--game-bg);
+    border: 1.5px solid var(--game-border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size: 0.9rem;
+    color: var(--game-text);
+  }
+  .game strong { font-size: 1rem; }
+  .game ol { margin: 0.5rem 0 0 1.5rem; padding: 0; }
+  .game li { margin-bottom: 0.3rem; }
+  .reveal-hint {
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-left: 0.3rem;
+  }
+  .legend {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size: 0.9rem;
+  }
+  .legend strong { color: var(--accent); }
+  .quote {
+    border-left: 4px solid var(--accent);
+    padding-left: 1rem;
+    margin: 1rem 0;
+    color: var(--muted);
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<h1>AI in Education: Closer Than People Think</h1>
+
+<div class="legend">
+  <strong>Legend:</strong>
+  <span class="press">Advance</span> = press the right arrow / space to advance.
+  <span class="press">Reveal</span> = press again to reveal the next animated item.
+  <span class="game">Interactive</span> = live audience or on-screen activity.
+</div>
+
+<div class="slide-header"><span class="slide-num">Slide 1</span> Title — AI in Education: Closer Than People Think</div>
+<p><span class="press">Advance</span> from the gallery into the deck.</p>
+<p>Open with a practical tone:</p>
+<p class="quote">"Today is not about making AI sound impressive. It is about making it usable."</p>
+<p>Set the central claim: AI is already within reach for ordinary teachers. It is not distant, elitist, or reserved for technical insiders. The audience should understand immediately that this talk is grounded in real classroom usefulness.</p>
+
+<div class="slide-header"><span class="slide-num">Slide 2</span> Why AI Still Feels Distant</div>
+<p><span class="press">Reveal</span> each perception card one at a time.</p>
+<p>Validate the room's hesitation. Acknowledge that AI often sounds too technical, feels like a specialist tool, arrives with hype instead of help, and is sometimes discussed like a private club.</p>
+<p>Key line:</p>
+<p class="quote">"The intimidation around AI is real, but much of it is created by the way AI is discussed rather than by the actual difficulty of starting to use it."</p>
+
+<div class="slide-header"><span class="slide-num">Slide 3</span> Accessibility Means In-Reach</div>
+<p><span class="press">Reveal</span> the four accessibility statements, ending with the positive framing.</p>
+<p>This is the key framing slide. Correct the meaning of accessibility: not only accessibility for learners, but accessibility as <em>in-reach</em> — how easy AI is to begin using, how available it already is, and how little status or technical prestige is required.</p>
+<p>Strong line:</p>
+<p class="quote">"AI is one of the few powerful tools that does not first ask who you know — it asks what you want help with."</p>
+
+<div class="slide-header"><span class="slide-num">Slide 4</span> When Tech Sounds Deeper Than It Is</div>
+<p><span class="press">Reveal</span> each row of the comparison table.</p>
+<p>Expose the performance of fake depth. If a sentence about AI sounds deep but does not help a teacher plan a lesson, assess understanding, or teach more clearly, it may just be jargon pretending to be wisdom.</p>
+<p>Encourage the audience to laugh and relax. The contrast is between impressive-sounding language and a simple Monday-morning action.</p>
+
+<div class="slide-header"><span class="slide-num">Slide 5</span> AI Is Already in Teachers' Hands</div>
+<p><span class="press">Reveal</span> the three use-case cards, then the RAND statistic.</p>
+<p>Move from theory to proof. Teachers are already using AI for lesson planning, classroom materials, and communication. RAND reported that roughly one-quarter of surveyed U.S. teachers used AI tools for instructional planning or teaching in the 2023–2024 school year.</p>
+<p>The point is not that every teacher is fully using AI. The point is that this has moved beyond theory into real workflows.</p>
+
+<div class="slide-header"><span class="slide-num">Slide 6</span> What AI Actually Gives Teachers</div>
+<p><span class="press">Reveal</span> the Assistant, Partner, and Tutor cards.</p>
+<p>Translate AI into teacher value. AI behaves most usefully as a fast support tool, not a magical replacement. Mention the OECD framing of generative AI as a tutor, partner, and assistant in education.</p>
+<ul>
+  <li><strong>Assistant:</strong> drafts materials, creates rubrics and quizzes, produces summaries and examples.</li>
+  <li><strong>Partner:</strong> brainstorms activities, suggests alternate explanations, supports differentiation.</li>
+  <li><strong>Tutor:</strong> generates practice questions, offers multiple explanations, helps create review prompts.</li>
+</ul>
+
+<div class="slide-header"><span class="slide-num">Slide 7</span> Live Challenge: Let's Build Something Useful</div>
+<div class="game">
+  <strong>Interactive Prompt Builder</strong>
+  <ol>
+    <li>Ask the audience for a topic, a grade level, and one classroom constraint.</li>
+    <li>Type or select them in the on-screen fields.</li>
+    <li>Click <strong>Generate Lesson Idea</strong> to reveal a practical AI-generated lesson.</li>
+  </ol>
+</div>
+<p>Transition line:</p>
+<p class="quote">"Let's stop talking about AI like it is a mystery and use it the way a busy teacher would."</p>
+<p>This slide proves the "in-reach" argument in real time. Effective AI use depends more on clear prompting than on advanced technical knowledge.</p>
+
+<div class="slide-header"><span class="slide-num">Slide 8</span> From Lesson to Experience</div>
+<p><span class="press">Reveal</span> the amplification ideas and the mini prompt example.</p>
+<p>Show that AI can amplify and gamify lessons, not just save time. One solid prompt can become a quiz, a game, a roleplay, a revision task, and a differentiated resource set.</p>
+<p>Mini prompt example to share:</p>
+<p class="quote">"Turn this Grade 5 history topic into a 15-minute classroom quest with teams, clues, points, and a final reflection."</p>
+
+<div class="slide-header"><span class="slide-num">Slide 9</span> AI Can Also Improve Learner Access</div>
+<p><span class="press">Reveal</span> each accessibility-for-learners card.</p>
+<p>Bring back the other meaning of accessibility. AI can help teachers simplify explanations, adjust reading level, offer alternative examples, support varied language needs, and create multiple paths into the same concept.</p>
+<p>Emphasize that this must be done carefully and ethically. AI supports inclusion when the teacher remains in control.</p>
+
+<div class="slide-header"><span class="slide-num">Slide 10</span> Use It, But Use It Wisely</div>
+<p><span class="press">Reveal</span> the guardrail points in two columns.</p>
+<p>Keep the presentation balanced and credible. AI is powerful and practical, but not beyond scrutiny. Practical AI use and responsible AI use belong together.</p>
+<p>Reference UNESCO guidance on human-centred use, ethical safeguards, and the protection of learners and educators. Key reminders: verify outputs, protect student privacy, keep the teacher in control, do not outsource judgment, and use AI to assist rather than replace thinking.</p>
+
+<div class="slide-header"><span class="slide-num">Slide 11</span> The Best Time to Start Is Small</div>
+<p><span class="press">Reveal</span> the closing cards and final message.</p>
+<p>End with a practical and empowering close. Teachers do not need to become AI experts overnight. They only need to begin using AI for one real classroom need at a time.</p>
+<p>Preserve these closing lines:</p>
+<p class="quote">"The goal is not to become an AI expert overnight. The goal is to become a better-equipped teacher."</p>
+<p class="quote">"AI is not reserved for the connected, the technical, or the intimidating. In education, it becomes powerful in the hands of ordinary teachers doing practical work well."</p>
+<p><span class="press">Advance</span> to exit the deck.</p>
+
+</body>
+</html>
