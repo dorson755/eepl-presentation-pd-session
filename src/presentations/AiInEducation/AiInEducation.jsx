@@ -187,12 +187,12 @@ const AiInEducation = () => {
         <Slide>
           <div style={slideContainerStyle}>
             <h2 className="text-gradient" style={{ fontSize: '3.8rem', marginBottom: '1rem' }}>
-              Accessibility Means In-Reach
+              (the other) Accessibility
             </h2>
             <p style={{ fontSize: '1.5rem', color: 'var(--text-secondary)', maxWidth: '800px', margin: '0 auto 3rem' }}>
               AI is near enough, simple enough, and available enough for ordinary educators to begin using now.
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', width: '95%' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', width: '95%' }}>
               <Appear>
                 <div className="glass-panel" style={{ padding: '2rem 1.5rem' }}>
                   <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🚫</div>
@@ -203,12 +203,6 @@ const AiInEducation = () => {
                 <div className="glass-panel" style={{ padding: '2rem 1.5rem' }}>
                   <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🚫</div>
                   <p style={{ fontSize: '1.2rem' }}>You do not need special insider access.</p>
-                </div>
-              </Appear>
-              <Appear>
-                <div className="glass-panel" style={{ padding: '2rem 1.5rem' }}>
-                  <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🚫</div>
-                  <p style={{ fontSize: '1.2rem' }}>You do not need elite status.</p>
                 </div>
               </Appear>
               <Appear>
