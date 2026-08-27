@@ -15,10 +15,11 @@ const SLIDE_INFO = [
   { index: 4, title: "AI Is Already in Teachers' Hands", subtitle: "Real classroom use", activeGame: null },
   { index: 5, title: "What AI Actually Gives Teachers", subtitle: "Assistant, partner, tutor", activeGame: null },
   { index: 6, title: "Live Challenge: Let's Build Something Useful", subtitle: "Interactive prompt demo", activeGame: "PromptBuilder" },
-  { index: 7, title: "From Lesson to Experience", subtitle: "Gamification and amplification", activeGame: null },
-  { index: 8, title: "AI Can Also Improve Learner Access", subtitle: "Accessibility for learners", activeGame: null },
-  { index: 9, title: "Use It, But Use It Wisely", subtitle: "Guardrails and judgment", activeGame: null },
-  { index: 10, title: "The Best Time to Start Is Small", subtitle: "Closing", activeGame: null }
+  { index: 7, title: "Where Do I Actually Go to Use AI?", subtitle: "Tools and entry points", activeGame: null },
+  { index: 8, title: "From Lesson to Experience", subtitle: "Gamification and amplification", activeGame: null },
+  { index: 9, title: "AI Can Also Improve Learner Access", subtitle: "Accessibility for learners", activeGame: null },
+  { index: 10, title: "Use It, But Use It Wisely", subtitle: "Guardrails and judgment", activeGame: null },
+  { index: 11, title: "The Best Time to Start Is Small", subtitle: "Closing", activeGame: null }
 ];
 
 const SlideSync = ({ slideNumber = 1, numberOfSlides = 11 }) => {
@@ -375,7 +376,70 @@ const AiInEducation = () => {
           </Notes>
         </Slide>
 
-        {/* Slide 8: Gamification and Amplification */}
+        {/* Slide 8: Tools Teachers Can Use */}
+        <Slide>
+          <div style={slideContainerStyle}>
+            <h2 className="text-gradient" style={{ fontSize: '3.6rem', marginBottom: '0.5rem' }}>
+              Where Do I Actually Go to Use AI?
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1.3rem', marginBottom: '2.5rem', maxWidth: '850px' }}>
+              The skill transfers. Start with whatever you already have access to.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', width: '92%' }}>
+              <Appear>
+                <motion.div className="glass-panel hover-lift" style={{ padding: '2rem 1.5rem', height: '100%', textAlign: 'left' }}>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>💬</div>
+                  <h3 style={{ fontSize: '1.4rem', marginBottom: '0.75rem', color: 'var(--accent-primary)' }}>General Chat Assistants</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6, marginBottom: '1rem' }}>ChatGPT, Claude, Gemini, Copilot</p>
+                  <ul style={{ listStyle: 'none', padding: 0, color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.7 }}>
+                    <li>• Draft lesson plans</li>
+                    <li>• Rewrite explanations</li>
+                    <li>• Brainstorm activities</li>
+                    <li>• Generate practice questions</li>
+                  </ul>
+                </motion.div>
+              </Appear>
+              <Appear>
+                <motion.div className="glass-panel hover-lift" style={{ padding: '2rem 1.5rem', height: '100%', textAlign: 'left' }}>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>🍎</div>
+                  <h3 style={{ fontSize: '1.4rem', marginBottom: '0.75rem', color: 'var(--accent-primary)' }}>Teaching-Focused Tools</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6, marginBottom: '1rem' }}>MagicSchool, Eduaide, Diffit, Curipod</p>
+                  <ul style={{ listStyle: 'none', padding: 0, color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.7 }}>
+                    <li>• Built-in lesson templates</li>
+                    <li>• Differentiation helpers</li>
+                    <li>• Rubric and quiz generators</li>
+                    <li>• Standards alignment support</li>
+                  </ul>
+                </motion.div>
+              </Appear>
+              <Appear>
+                <motion.div className="glass-panel hover-lift" style={{ padding: '2rem 1.5rem', height: '100%', textAlign: 'left' }}>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>📦</div>
+                  <h3 style={{ fontSize: '1.4rem', marginBottom: '0.75rem', color: 'var(--accent-primary)' }}>Tools Already in Your Workflow</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6, marginBottom: '1rem' }}>Google Docs, Microsoft Word, Canva</p>
+                  <ul style={{ listStyle: 'none', padding: 0, color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.7 }}>
+                    <li>• Built-in AI writing help</li>
+                    <li>• Slide and worksheet makers</li>
+                    <li>• Grammar and clarity checks</li>
+                    <li>• No new login required</li>
+                  </ul>
+                </motion.div>
+              </Appear>
+            </div>
+            <Appear>
+              <div className="glass-panel" style={{ marginTop: '2.5rem', padding: '1.5rem 2.5rem', maxWidth: '900px' }}>
+                <p style={{ fontSize: '1.25rem', color: 'var(--text-secondary)' }}>
+                  <strong style={{ color: 'var(--accent-primary)' }}>The tool matters less than the ask.</strong> A clear, specific prompt in a basic chat assistant will usually beat a vague prompt in a fancy teaching tool.
+                </p>
+              </div>
+            </Appear>
+          </div>
+          <Notes>
+            Reassure the audience that they do not need to learn every tool. The prompting skill transfers. Recommend starting with whatever is already available or approved in their school.
+          </Notes>
+        </Slide>
+
+        {/* Slide 9: Gamification and Amplification */}
         <Slide>
           <div style={slideContainerStyle}>
             <h2 className="text-gradient" style={{ fontSize: '3.8rem', marginBottom: '0.5rem' }}>
