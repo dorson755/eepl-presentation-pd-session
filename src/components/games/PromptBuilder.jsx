@@ -161,7 +161,7 @@ const PromptBuilder = () => {
   const voteTotal = activeVote && votes ? Object.values(votes).reduce((sum, v) => sum + (Number(v) || 0), 0) : 0;
 
   return (
-    <div className="glass-panel" style={{ padding: '2rem', width: '100%', maxWidth: 1000, margin: '0 auto' }}>
+    <div className="glass-panel" style={{ padding: '2rem', width: '100%', maxWidth: 1000, maxHeight: '88vh', overflowY: 'auto', margin: '0 auto' }}>
       <h3 className="text-gradient-accent" style={{ textAlign: 'center', marginBottom: '0.5rem', fontSize: '2rem' }}>
         Live Challenge: Build Something Useful
       </h3>
@@ -448,10 +448,12 @@ const GeneratedResponse = ({ mode, response, loading, onDownload }) => {
           <Wand2 size={18} className="animate-pulse" /> Building your lesson idea...
         </div>
       )}
-      <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'var(--font-primary)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0, color: 'var(--text-primary)' }}>
-        {response}
-      </pre>
-      <div ref={endRef} />
+      <div style={{ maxHeight: '280px', overflowY: 'auto', paddingRight: '0.5rem' }}>
+        <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'var(--font-primary)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0, color: 'var(--text-primary)' }}>
+          {response}
+        </pre>
+        <div ref={endRef} />
+      </div>
     </div>
   );
 };
