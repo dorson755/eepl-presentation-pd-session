@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, doc, setDoc, onSnapshot, getDoc } from "firebase/firestore";
+import { getFirestore, collection, doc, setDoc, updateDoc, arrayUnion, onSnapshot, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   projectId: "eepl-pd-session-live",
@@ -19,6 +19,15 @@ export const db = getFirestore(app);
 export const updateSessionState = async (sessionId, data) => {
   const ref = doc(db, 'sessions', sessionId);
   await setDoc(ref, { ...data, updatedAt: Date.now() }, { merge: true });
+  return ref;
+};
+
+// Append a reaction to the session document without clobbering other fields.
+export const addReaction = async (sessionId, emoji) => {
+  const ref = doc(db, 'sessions', sessionId);
+  await updateDoc(ref, {
+    reactions: arrayUnion({ emoji, timestamp: Date.now() })
+  });
   return ref;
 };
 

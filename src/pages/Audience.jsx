@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { db, listenToVoting } from '../firebase';
+import { db, listenToVoting, addReaction } from '../firebase';
 import { doc, updateDoc, increment } from 'firebase/firestore';
 import { Sparkles, Check, Download, BookOpen, Radio } from 'lucide-react';
 import { generateTakeawayPdf } from '../components/games/PdfTakeaway';
@@ -26,13 +26,18 @@ const Audience = () => {
     return () => unsubscribe();
   }, []);
 
-  const spawnReaction = (emoji) => {
+  const spawnReaction = async (emoji) => {
     const id = ++particleId.current;
     const startX = 15 + ((id * 37) % 70); // deterministic horizontal position (percent)
     setParticles(prev => [...prev, { id, emoji, x: startX }]);
     setTimeout(() => {
       setParticles(prev => prev.filter(p => p.id !== id));
     }, 1500);
+    try {
+      await addReaction('live_presentation', emoji);
+    } catch (e) {
+      console.error('Error sending reaction:', e);
+    }
   };
 
   const currentQuestionId = session?.gameData?.questionId;

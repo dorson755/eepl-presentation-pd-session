@@ -7,11 +7,11 @@ import PromptBuilder from '../../components/games/PromptBuilder';
 import LivePoll from '../../components/games/LivePoll';
 import AiOrHuman from '../../components/games/AiOrHuman';
 import ThreeBackground from '../../components/ThreeBackground';
-import { updateSessionState } from '../../firebase';
+import { updateSessionState, listenToVoting } from '../../firebase';
 
 const SLIDE_INFO = [
   { index: 0, title: "AI in Education: Closer Than People Think", subtitle: "Opening", activeGame: null },
-  { index: 1, title: "Why AI Still Feels Distant", subtitle: "The perception problem", activeGame: "LivePoll" },
+  { index: 1, title: "Why AI Still Feels Distant", subtitle: "The perception problem", activeGame: null },
   { index: 2, title: "(the other) Accessibility", subtitle: "Redefining access", activeGame: null },
   { index: 3, title: "When Tech Sounds Deeper Than It Is", subtitle: "Pseudo-profundity", activeGame: null },
   { index: 4, title: "AI or Human?", subtitle: "Interactive guessing game", activeGame: "AiOrHuman" },
@@ -58,6 +58,48 @@ const SlideSync = ({ slideNumber = 1, numberOfSlides = 13 }) => {
         transition={{ duration: 0.5, ease: 'easeOut' }}
         style={{ height: '100%', background: 'var(--accent-primary)', boxShadow: '0 0 15px var(--accent-glow)' }}
       />
+    </div>
+  );
+};
+
+const ReactionOverlay = () => {
+  const [particles, setParticles] = useState([]);
+  const lastTimestampRef = useRef(0);
+
+  useEffect(() => {
+    const unsubscribe = listenToVoting('live_presentation', (data) => {
+      const reactions = Array.isArray(data?.reactions) ? data.reactions : [];
+      const newReactions = reactions.filter(r => r.timestamp > lastTimestampRef.current);
+      if (newReactions.length > 0) {
+        lastTimestampRef.current = Math.max(...reactions.map(r => r.timestamp));
+        newReactions.forEach((r, i) => {
+          setTimeout(() => {
+            const id = Date.now() + i;
+            const startX = 10 + ((id + i * 23) % 80);
+            setParticles(prev => [...prev, { id, emoji: r.emoji, x: startX }]);
+            setTimeout(() => {
+              setParticles(prev => prev.filter(p => p.id !== id));
+            }, 2500);
+          }, i * 150);
+        });
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 9999, overflow: 'hidden' }}>
+      {particles.map(p => (
+        <motion.div
+          key={p.id}
+          initial={{ opacity: 1, y: 0, scale: 0.8 }}
+          animate={{ opacity: 0, y: -600, scale: 1.6, x: (p.x - 50) * 3 }}
+          transition={{ duration: 2.5, ease: 'easeOut' }}
+          style={{ position: 'absolute', left: `${p.x}%`, bottom: '10%', fontSize: '3rem' }}
+        >
+          {p.emoji}
+        </motion.div>
+      ))}
     </div>
   );
 };
@@ -182,21 +224,9 @@ const AiInEducation = () => {
                 </div>
               </Appear>
             </div>
-            <LivePoll
-              questionId="temperature-check"
-              title="Temperature Check"
-              question="How does AI in education feel to you right now?"
-              options={[
-                { id: 'curious', label: 'Curious', color: '#3b82f6' },
-                { id: 'skeptical', label: 'Skeptical', color: '#f59e0b' },
-                { id: 'overwhelmed', label: 'Overwhelmed', color: '#ef4444' },
-                { id: 'excited', label: 'Excited', color: '#10b981' }
-              ]}
-            />
           </div>
           <Notes>
             Validate the hesitation. The intimidation is real, but much of it is created by the way AI is discussed, not by the actual difficulty of starting.
-            Use the live poll to take the room's temperature and adjust your tone accordingly.
           </Notes>
         </Slide>
 
@@ -636,6 +666,7 @@ const AiInEducation = () => {
 
       </Deck>
       </div>
+      <ReactionOverlay />
     </div>
   );
 };
