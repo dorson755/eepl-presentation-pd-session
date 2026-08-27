@@ -6,14 +6,13 @@ import QRCode from 'react-qr-code';
 import PromptBuilder from '../../components/games/PromptBuilder';
 import LivePoll from '../../components/games/LivePoll';
 import AiOrHuman from '../../components/games/AiOrHuman';
-import EmojiReactions from '../../components/games/EmojiReactions';
 import ThreeBackground from '../../components/ThreeBackground';
 import { updateSessionState } from '../../firebase';
 
 const SLIDE_INFO = [
   { index: 0, title: "AI in Education: Closer Than People Think", subtitle: "Opening", activeGame: null },
   { index: 1, title: "Why AI Still Feels Distant", subtitle: "The perception problem", activeGame: "LivePoll" },
-  { index: 2, title: "(the other) Accessibility", subtitle: "Redefining access", activeGame: "EmojiReactions" },
+  { index: 2, title: "(the other) Accessibility", subtitle: "Redefining access", activeGame: null },
   { index: 3, title: "When Tech Sounds Deeper Than It Is", subtitle: "Pseudo-profundity", activeGame: null },
   { index: 4, title: "AI or Human?", subtitle: "Interactive guessing game", activeGame: "AiOrHuman" },
   { index: 5, title: "AI Is Already in Teachers' Hands", subtitle: "Real classroom use", activeGame: null },
@@ -231,22 +230,15 @@ const AiInEducation = () => {
               </Appear>
             </div>
             <Appear>
-              <motion.div className="glass-panel" style={{ marginTop: '2rem', padding: '1.5rem', maxWidth: '900px' }} whileHover={{ scale: 1.01 }}>
-                <p style={{ fontSize: '1.6rem', fontStyle: 'italic', color: 'var(--text-secondary)' }}>
+              <motion.div className="glass-panel" style={{ marginTop: '3rem', padding: '2rem', maxWidth: '900px' }} whileHover={{ scale: 1.01 }}>
+                <p style={{ fontSize: '1.8rem', fontStyle: 'italic', color: 'var(--text-secondary)' }}>
                   "AI is one of the few powerful tools that does not first ask who you know — it asks what you want help with."
                 </p>
               </motion.div>
             </Appear>
-            <Appear>
-              <EmojiReactions
-                statement="AI is one of the few powerful tools that does not first ask who you know — it asks what you want help with."
-                prompt="How does this idea land with you?"
-              />
-            </Appear>
           </div>
           <Notes>
             This is the key framing slide. The social point: AI is not gated by connections or credentials. It responds to clear thinking and clear need.
-            Use the reaction meter to see how the room responds to the core idea.
           </Notes>
         </Slide>
 

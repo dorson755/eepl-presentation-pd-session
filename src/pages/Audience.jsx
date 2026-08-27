@@ -5,10 +5,19 @@ import { doc, updateDoc, increment } from 'firebase/firestore';
 import { Sparkles, Check, Download, BookOpen, Radio } from 'lucide-react';
 import { generateTakeawayPdf } from '../components/games/PdfTakeaway';
 
+const REACTIONS = [
+  { id: 'fire', emoji: '🔥', label: 'Excited' },
+  { id: 'think', emoji: '🤔', label: 'Skeptical' },
+  { id: 'clap', emoji: '👏', label: 'Makes sense' },
+  { id: 'mindblown', emoji: '🤯', label: 'Mind blown' }
+];
+
 const Audience = () => {
   const [session, setSession] = useState(null);
   const [userVotes, setUserVotes] = useState({}); // Map of questionId -> votedOption
   const [submitting, setSubmitting] = useState(false);
+  const [particles, setParticles] = useState([]);
+  const particleId = useRef(0);
 
   useEffect(() => {
     const unsubscribe = listenToVoting('live_presentation', (data) => {
@@ -16,6 +25,15 @@ const Audience = () => {
     });
     return () => unsubscribe();
   }, []);
+
+  const spawnReaction = (emoji) => {
+    const id = ++particleId.current;
+    const startX = 15 + ((id * 37) % 70); // deterministic horizontal position (percent)
+    setParticles(prev => [...prev, { id, emoji, x: startX }]);
+    setTimeout(() => {
+      setParticles(prev => prev.filter(p => p.id !== id));
+    }, 1500);
+  };
 
   const currentQuestionId = session?.gameData?.questionId;
   const hasVotedCurrent = currentQuestionId ? Boolean(userVotes[currentQuestionId]) : false;
@@ -640,6 +658,37 @@ const Audience = () => {
 
         </AnimatePresence>
       </main>
+
+      {/* Floating Reactions */}
+      <div style={{ position: 'fixed', bottom: '3.5rem', left: '50%', transform: 'translateX(-50%)', zIndex: 60, display: 'flex', gap: '0.75rem', padding: '0.6rem 1rem', borderRadius: '999px', background: 'rgba(15, 23, 42, 0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}>
+        {REACTIONS.map((r) => (
+          <motion.button
+            key={r.id}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => spawnReaction(r.emoji)}
+            title={r.label}
+            style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '50%', width: 46, height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', cursor: 'pointer' }}
+          >
+            {r.emoji}
+          </motion.button>
+        ))}
+      </div>
+
+      {/* Floating Reaction Particles */}
+      <AnimatePresence>
+        {particles.map((p) => (
+          <motion.div
+            key={p.id}
+            initial={{ opacity: 1, y: 0, scale: 1 }}
+            animate={{ opacity: 0, y: -250, scale: 1.4 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5, ease: 'easeOut' }}
+            style={{ position: 'fixed', left: `${p.x}%`, bottom: '5rem', fontSize: '2rem', pointerEvents: 'none', zIndex: 70 }}
+          >
+            {p.emoji}
+          </motion.div>
+        ))}
+      </AnimatePresence>
 
       {/* Footer */}
       <footer style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
