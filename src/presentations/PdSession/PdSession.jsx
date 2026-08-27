@@ -110,13 +110,15 @@ const PdSession = () => {
   return (
     <div className="presentation-wrapper theme-presentation">
       <ThreeBackground />
+      <div className="presentation-overlay" />
       <AILibrarian />
-      <Deck
-        theme={theme}
-        transition={{ type: 'fade', duration: 0.6 }}
-        backgroundColor="transparent"
-        suppressBackdropFallback
-        template={({ slideNumber, numberOfSlides }) => (
+      <div className="presentation-stage">
+        <Deck
+          theme={theme}
+          transition={{ type: 'fade', duration: 0.6 }}
+          backgroundColor="transparent"
+          suppressBackdropFallback
+          template={({ slideNumber, numberOfSlides }) => (
           <SlideSync slideNumber={slideNumber} numberOfSlides={numberOfSlides} />
         )}
       >
@@ -304,6 +306,7 @@ const PdSession = () => {
         </Slide>
 
       </Deck>
+      </div>
     </div>
   );
 };

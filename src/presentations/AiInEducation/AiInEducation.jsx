@@ -101,15 +101,17 @@ const AiInEducation = () => {
   return (
     <div className="presentation-wrapper theme-presentation">
       <ThreeBackground />
-      <Deck
-        theme={theme}
-        transition={{ type: 'fade', duration: 0.6 }}
-        backgroundColor="transparent"
-        suppressBackdropFallback
-        template={({ slideNumber, numberOfSlides }) => (
-          <SlideSync slideNumber={slideNumber} numberOfSlides={numberOfSlides} />
-        )}
-      >
+      <div className="presentation-overlay" />
+      <div className="presentation-stage">
+        <Deck
+          theme={theme}
+          transition={{ type: 'fade', duration: 0.6 }}
+          backgroundColor="transparent"
+          suppressBackdropFallback
+          template={({ slideNumber, numberOfSlides }) => (
+            <SlideSync slideNumber={slideNumber} numberOfSlides={numberOfSlides} />
+          )}
+        >
 
         {/* Slide 1: Title */}
         <Slide>
@@ -591,6 +593,7 @@ const AiInEducation = () => {
         </Slide>
 
       </Deck>
+      </div>
     </div>
   );
 };
