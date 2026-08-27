@@ -5,25 +5,28 @@ import QRCode from 'react-qr-code';
 
 import PromptBuilder from '../../components/games/PromptBuilder';
 import LivePoll from '../../components/games/LivePoll';
+import AiOrHuman from '../../components/games/AiOrHuman';
+import EmojiReactions from '../../components/games/EmojiReactions';
 import ThreeBackground from '../../components/ThreeBackground';
 import { updateSessionState } from '../../firebase';
 
 const SLIDE_INFO = [
   { index: 0, title: "AI in Education: Closer Than People Think", subtitle: "Opening", activeGame: null },
   { index: 1, title: "Why AI Still Feels Distant", subtitle: "The perception problem", activeGame: "LivePoll" },
-  { index: 2, title: "(the other) Accessibility", subtitle: "Redefining access", activeGame: null },
+  { index: 2, title: "(the other) Accessibility", subtitle: "Redefining access", activeGame: "EmojiReactions" },
   { index: 3, title: "When Tech Sounds Deeper Than It Is", subtitle: "Pseudo-profundity", activeGame: null },
-  { index: 4, title: "AI Is Already in Teachers' Hands", subtitle: "Real classroom use", activeGame: null },
-  { index: 5, title: "What AI Actually Gives Teachers", subtitle: "Assistant, partner, tutor", activeGame: "LivePoll" },
-  { index: 6, title: "Live Challenge: Let's Build Something Useful", subtitle: "Interactive prompt demo", activeGame: "PromptBuilder" },
-  { index: 7, title: "Where Do I Actually Go to Use AI?", subtitle: "Tools and entry points", activeGame: null },
-  { index: 8, title: "From Lesson to Experience", subtitle: "Gamification and amplification", activeGame: null },
-  { index: 9, title: "AI Can Also Improve Learner Access", subtitle: "Accessibility for learners", activeGame: null },
-  { index: 10, title: "Use It, But Use It Wisely", subtitle: "Guardrails and judgment", activeGame: "LivePoll" },
-  { index: 11, title: "The Best Time to Start Is Small", subtitle: "Closing", activeGame: null }
+  { index: 4, title: "AI or Human?", subtitle: "Interactive guessing game", activeGame: "AiOrHuman" },
+  { index: 5, title: "AI Is Already in Teachers' Hands", subtitle: "Real classroom use", activeGame: null },
+  { index: 6, title: "What AI Actually Gives Teachers", subtitle: "Assistant, partner, tutor", activeGame: "LivePoll" },
+  { index: 7, title: "Live Challenge: Let's Build Something Useful", subtitle: "Interactive prompt demo", activeGame: "PromptBuilder" },
+  { index: 8, title: "Where Do I Actually Go to Use AI?", subtitle: "Tools and entry points", activeGame: null },
+  { index: 9, title: "From Lesson to Experience", subtitle: "Gamification and amplification", activeGame: null },
+  { index: 10, title: "AI Can Also Improve Learner Access", subtitle: "Accessibility for learners", activeGame: null },
+  { index: 11, title: "Use It, But Use It Wisely", subtitle: "Guardrails and judgment", activeGame: "LivePoll" },
+  { index: 12, title: "The Best Time to Start Is Small", subtitle: "Closing", activeGame: null }
 ];
 
-const SlideSync = ({ slideNumber = 1, numberOfSlides = 11 }) => {
+const SlideSync = ({ slideNumber = 1, numberOfSlides = 13 }) => {
   const lastSlideRef = useRef(null);
 
   useEffect(() => {
@@ -228,15 +231,22 @@ const AiInEducation = () => {
               </Appear>
             </div>
             <Appear>
-              <motion.div className="glass-panel" style={{ marginTop: '3rem', padding: '2rem', maxWidth: '900px' }} whileHover={{ scale: 1.01 }}>
-                <p style={{ fontSize: '1.8rem', fontStyle: 'italic', color: 'var(--text-secondary)' }}>
+              <motion.div className="glass-panel" style={{ marginTop: '2rem', padding: '1.5rem', maxWidth: '900px' }} whileHover={{ scale: 1.01 }}>
+                <p style={{ fontSize: '1.6rem', fontStyle: 'italic', color: 'var(--text-secondary)' }}>
                   "AI is one of the few powerful tools that does not first ask who you know — it asks what you want help with."
                 </p>
               </motion.div>
             </Appear>
+            <Appear>
+              <EmojiReactions
+                statement="AI is one of the few powerful tools that does not first ask who you know — it asks what you want help with."
+                prompt="How does this idea land with you?"
+              />
+            </Appear>
           </div>
           <Notes>
             This is the key framing slide. The social point: AI is not gated by connections or credentials. It responds to clear thinking and clear need.
+            Use the reaction meter to see how the room responds to the core idea.
           </Notes>
         </Slide>
 
@@ -279,7 +289,18 @@ const AiInEducation = () => {
           </Notes>
         </Slide>
 
-        {/* Slide 5: Teachers Already Using It */}
+        {/* Slide 5: AI or Human? */}
+        <Slide>
+          <div style={{ ...slideContainerStyle, padding: '1.5rem' }}>
+            <AiOrHuman />
+          </div>
+          <Notes>
+            A fun interlude. Show two lesson plans and let the audience guess which one AI wrote.
+            The point: clear prompting can produce surprisingly human-sounding, useful classroom work.
+          </Notes>
+        </Slide>
+
+        {/* Slide 6: Teachers Already Using It */}
         <Slide>
           <div style={slideContainerStyle}>
             <h2 className="text-gradient" style={{ fontSize: '3.8rem', marginBottom: '1rem' }}>

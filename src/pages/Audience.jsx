@@ -505,6 +505,139 @@ const Audience = () => {
             </motion.div>
           )}
 
+          {/* State 7: AI or Human? */}
+          {session?.activeGame === 'AiOrHuman' && session.gameData && !session.gameData.isComplete && (
+            <motion.div
+              key={`aoh-${currentQuestionId}`}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
+            >
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ textTransform: 'uppercase', letterSpacing: '0.15em', fontSize: '0.8rem', color: 'var(--accent-primary, #38bdf8)', fontWeight: 800 }}>
+                  AI or Human?
+                </span>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: 700, margin: '0.5rem 0 0' }}>
+                  {session.gameData.questionText}
+                </h2>
+              </div>
+
+              {hasVotedCurrent ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  style={{ background: 'rgba(56, 189, 248, 0.1)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: '16px', padding: '1.5rem', textAlign: 'center' }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: '#38bdf8', fontWeight: 700, fontSize: '1.1rem', marginBottom: '1.25rem' }}>
+                    <Check size={20} /> You picked Option {userVoteCurrent?.toUpperCase()}
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    {(session.gameData.options || []).map((opt) => {
+                      const count = Number(votes[opt.id]) || 0;
+                      const percent = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+                      return (
+                        <div key={opt.id} style={{ textAlign: 'left' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '0.25rem', fontWeight: 600 }}>
+                            <span>{opt.label}</span>
+                            <span>{count} votes ({percent}%)</span>
+                          </div>
+                          <div style={{ height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${percent}%` }}
+                              style={{ height: '100%', background: 'var(--accent-primary, #38bdf8)' }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', marginTop: '1.25rem', marginBottom: 0 }}>
+                    Wait for the presenter to reveal the answer on the main screen.
+                  </p>
+                </motion.div>
+              ) : (
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                  {(session.gameData.options || []).map((opt) => (
+                    <motion.button
+                      key={opt.id}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleVote(opt.id)}
+                      disabled={submitting}
+                      style={{ flex: 1, padding: '1.5rem 1rem', borderRadius: '14px', border: 'none', background: 'linear-gradient(135deg, #3b82f6, #6366f1)', color: 'white', fontSize: '1.3rem', fontWeight: 800, cursor: 'pointer', boxShadow: '0 6px 20px rgba(59, 130, 246, 0.3)' }}
+                    >
+                      {opt.label}
+                    </motion.button>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {/* State 8: Emoji Reactions */}
+          {session?.activeGame === 'EmojiReactions' && session.gameData && !session.gameData.isComplete && (
+            <motion.div
+              key={`emoji-${currentQuestionId}`}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
+            >
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ textTransform: 'uppercase', letterSpacing: '0.15em', fontSize: '0.8rem', color: 'var(--accent-primary, #38bdf8)', fontWeight: 800 }}>
+                  Reaction Meter
+                </span>
+                <h2 style={{ fontSize: '1.3rem', fontWeight: 600, margin: '0.5rem 0 0', lineHeight: 1.4 }}>
+                  {session.gameData.questionText}
+                </h2>
+              </div>
+
+              {hasVotedCurrent ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  style={{ background: 'rgba(56, 189, 248, 0.1)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: '16px', padding: '1.5rem', textAlign: 'center' }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: '#38bdf8', fontWeight: 700, fontSize: '1.1rem', marginBottom: '1.25rem' }}>
+                    <Check size={20} /> Reaction Recorded
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.75rem' }}>
+                    {(session.gameData.options || []).map((opt) => {
+                      const count = Number(votes[opt.id]) || 0;
+                      const percent = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+                      return (
+                        <div key={opt.id} style={{ textAlign: 'center', padding: '0.75rem', borderRadius: '10px', background: 'rgba(255,255,255,0.05)' }}>
+                          <div style={{ fontSize: '1.6rem' }}>{opt.label.split(' ')[0]}</div>
+                          <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)', marginTop: '0.25rem' }}>{opt.label.split(' ').slice(1).join(' ')}</div>
+                          <div style={{ fontSize: '0.85rem', color: opt.color || '#38bdf8', fontWeight: 700, marginTop: '0.25rem' }}>{count} ({percent}%)</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
+                  {(session.gameData.options || []).map((opt) => (
+                    <motion.button
+                      key={opt.id}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleVote(opt.id)}
+                      disabled={submitting}
+                      style={{ padding: '1.25rem', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.05)', color: 'white', fontSize: '1.2rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', borderLeft: `4px solid ${opt.color || '#38bdf8'}` }}
+                    >
+                      <span>{opt.label.split(' ')[0]}</span>
+                      <span style={{ fontSize: '0.85rem' }}>{opt.label.split(' ').slice(1).join(' ')}</span>
+                    </motion.button>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
+
         </AnimatePresence>
       </main>
 
