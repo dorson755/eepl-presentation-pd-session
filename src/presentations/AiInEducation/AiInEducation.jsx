@@ -567,23 +567,23 @@ const AiInEducation = () => {
 
         {/* Slide 10: Guardrails and Judgment */}
         <Slide>
-          <div style={slideContainerStyle}>
-            <h2 className="text-gradient" style={{ fontSize: '3.6rem', marginBottom: '0.75rem' }}>
+          <div style={{ ...slideContainerStyle, justifyContent: 'flex-start', paddingTop: '3rem' }}>
+            <h2 className="text-gradient" style={{ fontSize: '3.2rem', marginBottom: '0.25rem' }}>
               Use It, But Use It Wisely
             </h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', maxWidth: '800px', margin: '0 auto 2rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: '800px', margin: '0 auto 0.75rem' }}>
               Practical AI use and responsible AI use belong together.
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', width: '85%', textAlign: 'left', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', width: '85%', textAlign: 'left', marginBottom: '0.75rem' }}>
               <div>
-                <Appear><p style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', fontSize: '1.25rem' }}><span style={{ marginRight: '0.75rem', fontSize: '1.6rem' }}>🔍</span> Verify outputs.</p></Appear>
-                <Appear><p style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', fontSize: '1.25rem' }}><span style={{ marginRight: '0.75rem', fontSize: '1.6rem' }}>🔒</span> Protect student privacy.</p></Appear>
-                <Appear><p style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', fontSize: '1.25rem' }}><span style={{ marginRight: '0.75rem', fontSize: '1.6rem' }}>🧑‍🏫</span> Keep the teacher in control.</p></Appear>
+                <Appear><p style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', fontSize: '1.1rem' }}><span style={{ marginRight: '0.6rem', fontSize: '1.4rem' }}>🔍</span> Verify outputs.</p></Appear>
+                <Appear><p style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', fontSize: '1.1rem' }}><span style={{ marginRight: '0.6rem', fontSize: '1.4rem' }}>🔒</span> Protect student privacy.</p></Appear>
+                <Appear><p style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', fontSize: '1.1rem' }}><span style={{ marginRight: '0.6rem', fontSize: '1.4rem' }}>🧑‍🏫</span> Keep the teacher in control.</p></Appear>
               </div>
               <div>
-                <Appear><p style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', fontSize: '1.25rem' }}><span style={{ marginRight: '0.75rem', fontSize: '1.6rem' }}>🧠</span> Do not outsource judgment.</p></Appear>
-                <Appear><p style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', fontSize: '1.25rem' }}><span style={{ marginRight: '0.75rem', fontSize: '1.6rem' }}>🛡️</span> Use AI to assist, not replace thinking.</p></Appear>
-                <Appear><p style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', fontSize: '1.25rem' }}><span style={{ marginRight: '0.75rem', fontSize: '1.6rem' }}>⚖️</span> Follow ethical, human-centred guidance.</p></Appear>
+                <Appear><p style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', fontSize: '1.1rem' }}><span style={{ marginRight: '0.6rem', fontSize: '1.4rem' }}>🧠</span> Do not outsource judgment.</p></Appear>
+                <Appear><p style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', fontSize: '1.1rem' }}><span style={{ marginRight: '0.6rem', fontSize: '1.4rem' }}>🛡️</span> Use AI to assist, not replace thinking.</p></Appear>
+                <Appear><p style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', fontSize: '1.1rem' }}><span style={{ marginRight: '0.6rem', fontSize: '1.4rem' }}>⚖️</span> Follow ethical, human-centred guidance.</p></Appear>
               </div>
             </div>
             <LivePoll
