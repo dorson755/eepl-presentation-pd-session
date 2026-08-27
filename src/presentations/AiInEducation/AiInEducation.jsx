@@ -4,21 +4,22 @@ import { motion } from 'framer-motion';
 import QRCode from 'react-qr-code';
 
 import PromptBuilder from '../../components/games/PromptBuilder';
+import LivePoll from '../../components/games/LivePoll';
 import ThreeBackground from '../../components/ThreeBackground';
 import { updateSessionState } from '../../firebase';
 
 const SLIDE_INFO = [
   { index: 0, title: "AI in Education: Closer Than People Think", subtitle: "Opening", activeGame: null },
-  { index: 1, title: "Why AI Still Feels Distant", subtitle: "The perception problem", activeGame: null },
-  { index: 2, title: "Accessibility Means In-Reach", subtitle: "Redefining access", activeGame: null },
+  { index: 1, title: "Why AI Still Feels Distant", subtitle: "The perception problem", activeGame: "LivePoll" },
+  { index: 2, title: "(the other) Accessibility", subtitle: "Redefining access", activeGame: null },
   { index: 3, title: "When Tech Sounds Deeper Than It Is", subtitle: "Pseudo-profundity", activeGame: null },
   { index: 4, title: "AI Is Already in Teachers' Hands", subtitle: "Real classroom use", activeGame: null },
-  { index: 5, title: "What AI Actually Gives Teachers", subtitle: "Assistant, partner, tutor", activeGame: null },
+  { index: 5, title: "What AI Actually Gives Teachers", subtitle: "Assistant, partner, tutor", activeGame: "LivePoll" },
   { index: 6, title: "Live Challenge: Let's Build Something Useful", subtitle: "Interactive prompt demo", activeGame: "PromptBuilder" },
   { index: 7, title: "Where Do I Actually Go to Use AI?", subtitle: "Tools and entry points", activeGame: null },
   { index: 8, title: "From Lesson to Experience", subtitle: "Gamification and amplification", activeGame: null },
   { index: 9, title: "AI Can Also Improve Learner Access", subtitle: "Accessibility for learners", activeGame: null },
-  { index: 10, title: "Use It, But Use It Wisely", subtitle: "Guardrails and judgment", activeGame: null },
+  { index: 10, title: "Use It, But Use It Wisely", subtitle: "Guardrails and judgment", activeGame: "LivePoll" },
   { index: 11, title: "The Best Time to Start Is Small", subtitle: "Closing", activeGame: null }
 ];
 
@@ -150,38 +151,50 @@ const AiInEducation = () => {
         {/* Slide 2: Perception Problem */}
         <Slide>
           <div style={slideContainerStyle}>
-            <h2 className="text-gradient-accent" style={{ fontSize: '3.8rem', marginBottom: '3rem' }}>
+            <h2 className="text-gradient-accent" style={{ fontSize: '3.6rem', marginBottom: '1.5rem' }}>
               Why AI Still Feels Distant
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', width: '90%', textAlign: 'left' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', width: '90%', textAlign: 'left', marginBottom: '1.5rem' }}>
               <Appear>
-                <div className="glass-panel hover-lift" style={{ padding: '2rem' }}>
-                  <h3 style={{ color: 'var(--accent-primary)', marginBottom: '1rem', fontSize: '1.5rem' }}>Sounds too technical</h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem' }}>The language around AI often sounds like it belongs in an engineering lab, not a staff room.</p>
+                <div className="glass-panel hover-lift" style={{ padding: '1.5rem' }}>
+                  <h3 style={{ color: 'var(--accent-primary)', marginBottom: '0.5rem', fontSize: '1.3rem' }}>Sounds too technical</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem' }}>The language around AI often sounds like it belongs in an engineering lab, not a staff room.</p>
                 </div>
               </Appear>
               <Appear>
-                <div className="glass-panel hover-lift" style={{ padding: '2rem' }}>
-                  <h3 style={{ color: 'var(--accent-primary)', marginBottom: '1rem', fontSize: '1.5rem' }}>Feels like a specialist tool</h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem' }}>It is often introduced as if only tech-savvy teachers or administrators can use it well.</p>
+                <div className="glass-panel hover-lift" style={{ padding: '1.5rem' }}>
+                  <h3 style={{ color: 'var(--accent-primary)', marginBottom: '0.5rem', fontSize: '1.3rem' }}>Feels like a specialist tool</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem' }}>It is often introduced as if only tech-savvy teachers or administrators can use it well.</p>
                 </div>
               </Appear>
               <Appear>
-                <div className="glass-panel hover-lift" style={{ padding: '2rem' }}>
-                  <h3 style={{ color: 'var(--accent-primary)', marginBottom: '1rem', fontSize: '1.5rem' }}>Comes with hype, not help</h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem' }}>Too many introductions promise revolution but skip the Monday-morning usefulness.</p>
+                <div className="glass-panel hover-lift" style={{ padding: '1.5rem' }}>
+                  <h3 style={{ color: 'var(--accent-primary)', marginBottom: '0.5rem', fontSize: '1.3rem' }}>Comes with hype, not help</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem' }}>Too many introductions promise revolution but skip the Monday-morning usefulness.</p>
                 </div>
               </Appear>
               <Appear>
-                <div className="glass-panel hover-lift" style={{ padding: '2rem' }}>
-                  <h3 style={{ color: 'var(--accent-primary)', marginBottom: '1rem', fontSize: '1.5rem' }}>Seems like a private club</h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem' }}>The conversation can feel as if AI is reserved for insiders with special access or status.</p>
+                <div className="glass-panel hover-lift" style={{ padding: '1.5rem' }}>
+                  <h3 style={{ color: 'var(--accent-primary)', marginBottom: '0.5rem', fontSize: '1.3rem' }}>Seems like a private club</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem' }}>The conversation can feel as if AI is reserved for insiders with special access or status.</p>
                 </div>
               </Appear>
             </div>
+            <LivePoll
+              questionId="temperature-check"
+              title="Temperature Check"
+              question="How does AI in education feel to you right now?"
+              options={[
+                { id: 'curious', label: 'Curious', color: '#3b82f6' },
+                { id: 'skeptical', label: 'Skeptical', color: '#f59e0b' },
+                { id: 'overwhelmed', label: 'Overwhelmed', color: '#ef4444' },
+                { id: 'excited', label: 'Excited', color: '#10b981' }
+              ]}
+            />
           </div>
           <Notes>
             Validate the hesitation. The intimidation is real, but much of it is created by the way AI is discussed, not by the actual difficulty of starting.
+            Use the live poll to take the room's temperature and adjust your tone accordingly.
           </Notes>
         </Slide>
 
@@ -314,18 +327,18 @@ const AiInEducation = () => {
         {/* Slide 6: What AI Gives Teachers */}
         <Slide>
           <div style={slideContainerStyle}>
-            <h2 className="text-gradient-accent" style={{ fontSize: '3.8rem', marginBottom: '0.5rem' }}>
+            <h2 className="text-gradient-accent" style={{ fontSize: '3.6rem', marginBottom: '0.5rem' }}>
               What AI Actually Gives Teachers
             </h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '1.3rem', marginBottom: '3rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', marginBottom: '1.5rem' }}>
               Think of AI less as a replacement and more as a fast, flexible support tool.
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', width: '92%' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', width: '92%', marginBottom: '1.5rem' }}>
               <Appear>
-                <motion.div className="glass-panel hover-lift" style={{ padding: '2.5rem 2rem', height: '100%' }}>
-                  <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🧑‍💼</div>
-                  <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem', color: 'var(--accent-primary)' }}>Assistant</h3>
-                  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'left', color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.8 }}>
+                <motion.div className="glass-panel hover-lift" style={{ padding: '1.75rem 1.5rem', height: '100%' }}>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>🧑‍💼</div>
+                  <h3 style={{ fontSize: '1.5rem', marginBottom: '0.75rem', color: 'var(--accent-primary)' }}>Assistant</h3>
+                  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'left', color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7 }}>
                     <li>• Drafts lesson materials</li>
                     <li>• Creates rubrics and quizzes</li>
                     <li>• Produces summaries and examples</li>
@@ -333,10 +346,10 @@ const AiInEducation = () => {
                 </motion.div>
               </Appear>
               <Appear>
-                <motion.div className="glass-panel hover-lift" style={{ padding: '2.5rem 2rem', height: '100%' }}>
-                  <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🤝</div>
-                  <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem', color: 'var(--accent-primary)' }}>Partner</h3>
-                  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'left', color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.8 }}>
+                <motion.div className="glass-panel hover-lift" style={{ padding: '1.75rem 1.5rem', height: '100%' }}>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>🤝</div>
+                  <h3 style={{ fontSize: '1.5rem', marginBottom: '0.75rem', color: 'var(--accent-primary)' }}>Partner</h3>
+                  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'left', color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7 }}>
                     <li>• Helps brainstorm activities</li>
                     <li>• Suggests alternate explanations</li>
                     <li>• Supports differentiation ideas</li>
@@ -344,10 +357,10 @@ const AiInEducation = () => {
                 </motion.div>
               </Appear>
               <Appear>
-                <motion.div className="glass-panel hover-lift" style={{ padding: '2.5rem 2rem', height: '100%' }}>
-                  <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎓</div>
-                  <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem', color: 'var(--accent-primary)' }}>Tutor</h3>
-                  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'left', color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.8 }}>
+                <motion.div className="glass-panel hover-lift" style={{ padding: '1.75rem 1.5rem', height: '100%' }}>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>🎓</div>
+                  <h3 style={{ fontSize: '1.5rem', marginBottom: '0.75rem', color: 'var(--accent-primary)' }}>Tutor</h3>
+                  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'left', color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7 }}>
                     <li>• Generates practice questions</li>
                     <li>• Offers multiple explanations</li>
                     <li>• Helps create review and feedback prompts</li>
@@ -355,9 +368,20 @@ const AiInEducation = () => {
                 </motion.div>
               </Appear>
             </div>
+            <LivePoll
+              questionId="role-vote"
+              title="Which Role Helps You Most?"
+              question="Which AI role would help you most this week?"
+              options={[
+                { id: 'assistant', label: 'Assistant — draft materials and quizzes', color: '#3b82f6' },
+                { id: 'partner', label: 'Partner — brainstorm and differentiate', color: '#8b5cf6' },
+                { id: 'tutor', label: 'Tutor — practice questions and explanations', color: '#10b981' }
+              ]}
+            />
           </div>
           <Notes>
             Align with OECD framing of AI as tutor, partner, and assistant. Emphasize practical value over magical replacement.
+            Use the live poll to find out which role the room is most interested in.
           </Notes>
         </Slide>
 
@@ -523,34 +547,39 @@ const AiInEducation = () => {
         {/* Slide 10: Guardrails and Judgment */}
         <Slide>
           <div style={slideContainerStyle}>
-            <h2 className="text-gradient" style={{ fontSize: '3.8rem', marginBottom: '1rem' }}>
+            <h2 className="text-gradient" style={{ fontSize: '3.6rem', marginBottom: '0.75rem' }}>
               Use It, But Use It Wisely
             </h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '1.4rem', maxWidth: '800px', margin: '0 auto 3rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', maxWidth: '800px', margin: '0 auto 2rem' }}>
               Practical AI use and responsible AI use belong together.
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', width: '85%', textAlign: 'left' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', width: '85%', textAlign: 'left', marginBottom: '1.5rem' }}>
               <div>
-                <Appear><p style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', fontSize: '1.5rem' }}><span style={{ marginRight: '1rem', fontSize: '2rem' }}>🔍</span> Verify outputs.</p></Appear>
-                <Appear><p style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', fontSize: '1.5rem' }}><span style={{ marginRight: '1rem', fontSize: '2rem' }}>🔒</span> Protect student privacy.</p></Appear>
-                <Appear><p style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', fontSize: '1.5rem' }}><span style={{ marginRight: '1rem', fontSize: '2rem' }}>🧑‍🏫</span> Keep the teacher in control.</p></Appear>
+                <Appear><p style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', fontSize: '1.25rem' }}><span style={{ marginRight: '0.75rem', fontSize: '1.6rem' }}>🔍</span> Verify outputs.</p></Appear>
+                <Appear><p style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', fontSize: '1.25rem' }}><span style={{ marginRight: '0.75rem', fontSize: '1.6rem' }}>🔒</span> Protect student privacy.</p></Appear>
+                <Appear><p style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', fontSize: '1.25rem' }}><span style={{ marginRight: '0.75rem', fontSize: '1.6rem' }}>🧑‍🏫</span> Keep the teacher in control.</p></Appear>
               </div>
               <div>
-                <Appear><p style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', fontSize: '1.5rem' }}><span style={{ marginRight: '1rem', fontSize: '2rem' }}>🧠</span> Do not outsource judgment.</p></Appear>
-                <Appear><p style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', fontSize: '1.5rem' }}><span style={{ marginRight: '1rem', fontSize: '2rem' }}>🛡️</span> Use AI to assist, not replace thinking.</p></Appear>
-                <Appear><p style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', fontSize: '1.5rem' }}><span style={{ marginRight: '1rem', fontSize: '2rem' }}>⚖️</span> Follow ethical, human-centred guidance.</p></Appear>
+                <Appear><p style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', fontSize: '1.25rem' }}><span style={{ marginRight: '0.75rem', fontSize: '1.6rem' }}>🧠</span> Do not outsource judgment.</p></Appear>
+                <Appear><p style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', fontSize: '1.25rem' }}><span style={{ marginRight: '0.75rem', fontSize: '1.6rem' }}>🛡️</span> Use AI to assist, not replace thinking.</p></Appear>
+                <Appear><p style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', fontSize: '1.25rem' }}><span style={{ marginRight: '0.75rem', fontSize: '1.6rem' }}>⚖️</span> Follow ethical, human-centred guidance.</p></Appear>
               </div>
             </div>
-            <Appear>
-              <div className="glass-panel" style={{ marginTop: '3rem', padding: '1.5rem 2.5rem', maxWidth: '900px' }}>
-                <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>
-                  UNESCO emphasizes human-centred use, ethical safeguards, and the protection of learners and educators.
-                </p>
-              </div>
-            </Appear>
+            <LivePoll
+              questionId="guardrails-priority"
+              title="Which Safeguard Matters Most?"
+              question="Which guardrail is your top priority when using AI with students?"
+              options={[
+                { id: 'verify', label: 'Verify outputs', color: '#3b82f6' },
+                { id: 'privacy', label: 'Protect student privacy', color: '#8b5cf6' },
+                { id: 'control', label: 'Keep the teacher in control', color: '#10b981' },
+                { id: 'judgment', label: 'Do not outsource judgment', color: '#f59e0b' }
+              ]}
+            />
           </div>
           <Notes>
             Keep the presentation balanced. AI is powerful but not beyond scrutiny. Human judgment remains essential.
+            Use the live poll to surface which safeguard the room cares about most.
           </Notes>
         </Slide>
 

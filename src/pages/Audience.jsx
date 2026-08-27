@@ -433,6 +433,78 @@ const Audience = () => {
             </motion.div>
           )}
 
+          {/* State 6: Generic Live Poll */}
+          {session?.activeGame === 'LivePoll' && session.gameData && !session.gameData.isComplete && (
+            <motion.div
+              key={`poll-${currentQuestionId}`}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
+            >
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ textTransform: 'uppercase', letterSpacing: '0.15em', fontSize: '0.8rem', color: 'var(--accent-primary, #38bdf8)', fontWeight: 800 }}>
+                  Live Poll
+                </span>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: 700, margin: '0.5rem 0 0' }}>
+                  {session.gameData.question}
+                </h2>
+              </div>
+
+              {hasVotedCurrent ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  style={{ background: 'rgba(56, 189, 248, 0.1)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: '16px', padding: '1.5rem', textAlign: 'center' }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: '#38bdf8', fontWeight: 700, fontSize: '1.1rem', marginBottom: '1.25rem' }}>
+                    <Check size={20} /> Vote Recorded
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    {(session.gameData.options || []).map((opt) => {
+                      const count = Number(votes[opt.id]) || 0;
+                      const percent = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+                      return (
+                        <div key={opt.id} style={{ textAlign: 'left' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '0.25rem', fontWeight: 600 }}>
+                            <span>{opt.label}</span>
+                            <span>{count} votes ({percent}%)</span>
+                          </div>
+                          <div style={{ height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${percent}%` }}
+                              style={{ height: '100%', background: opt.color || 'var(--accent-primary, #38bdf8)' }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', marginTop: '1.25rem', marginBottom: 0 }}>
+                    Look at the projector screen to see the discussion.
+                  </p>
+                </motion.div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {(session.gameData.options || []).map((opt) => (
+                    <motion.button
+                      key={opt.id}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => handleVote(opt.id)}
+                      disabled={submitting}
+                      style={{ padding: '1rem 1.25rem', textAlign: 'left', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.05)', color: 'white', fontSize: '0.95rem', lineHeight: 1.4, cursor: 'pointer', borderLeft: `4px solid ${opt.color || '#38bdf8'}` }}
+                    >
+                      {opt.label}
+                    </motion.button>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
+
         </AnimatePresence>
       </main>
 
